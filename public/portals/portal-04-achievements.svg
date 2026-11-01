@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <radialGradient id="ac-bg" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#1c1606" />
+      <stop offset="50%" stop-color="#120e05" />
+      <stop offset="100%" stop-color="#050814" />
+    </radialGradient>
+    <linearGradient id="ac-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+    <pattern id="ac-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#292010" stroke-width="0.8" stroke-opacity="0.6"/>
+    </pattern>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#ac-bg)" />
+  <rect width="800" height="500" fill="url(#ac-grid)" opacity="0.8" />
+
+  <!-- Outer HUD Boundary & Framing -->
+  <rect x="25" y="25" width="750" height="450" fill="none" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="6 4" />
+  <path d="M 25 50 L 25 25 L 50 25 M 750 25 L 775 25 L 775 50 M 775 450 L 775 475 L 750 475 M 50 475 L 25 475 L 25 450" fill="none" stroke="#fbbf24" stroke-width="2.5" />
+
+  <!-- Header & Telemetry -->
+  <text x="40" y="52" font-family="monospace" font-size="11" fill="#fbbf24" letter-spacing="2" opacity="0.9">SYS.VAULT // MERIT.REGISTRY</text>
+  <text x="630" y="52" font-family="monospace" font-size="11" fill="#fef08a" letter-spacing="2" opacity="0.9">VERIFIED ARCHIVE</text>
+  <text x="40" y="460" font-family="monospace" font-size="10" fill="#94a3b8" letter-spacing="1.5">SECURITY PROTOCOL: ENCRYPTED MERIT RECORD</text>
+  <text x="655" y="460" font-family="monospace" font-size="10" fill="#fbbf24" letter-spacing="1.5">5 KEY HONORS</text>
+
+  <!-- Large Center Vault Door Ring -->
+  <circle cx="400" cy="245" r="160" fill="none" stroke="#78350f" stroke-width="2" stroke-opacity="0.4" />
+  <circle cx="400" cy="245" r="140" fill="none" stroke="#b45309" stroke-width="1.2" stroke-dasharray="4 6" stroke-opacity="0.5" />
+  <circle cx="400" cy="245" r="110" fill="#0f0c05" stroke="#f59e0b" stroke-width="2" />
+  <circle cx="400" cy="245" r="95" fill="none" stroke="#fbbf24" stroke-width="1" stroke-dasharray="10 4" />
+
+  <!-- Hexagonal Vault Locking Mechanism -->
+  <polygon points="400,165 470,205 470,285 400,325 330,285 330,205" fill="#171208" stroke="url(#ac-gold)" stroke-width="2.5" />
+
+  <!-- Center Medal Crest: Branch Topper Medal of Merit -->
+  <circle cx="400" cy="245" r="45" fill="#241a06" stroke="#fef08a" stroke-width="1.5" />
+  <!-- Star & Laurel -->
+  <polygon points="400,215 408,235 430,235 412,247 419,268 400,254 381,268 388,247 370,235 392,235" fill="url(#ac-gold)" />
+
+  <text x="400" y="295" font-family="sans-serif" font-weight="700" font-size="9" fill="#fef08a" text-anchor="middle" letter-spacing="1">MEDAL OF MERIT</text>
+
+  <!-- Flanking Badge Pedestals -->
+  <!-- Left Badge: State Rank 10 -->
+  <g transform="translate(160, 245)">
+    <circle cx="0" cy="0" r="48" fill="#120e06" stroke="#f59e0b" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#fbbf24" stroke-width="0.8" stroke-dasharray="3 3" />
+    <text x="0" y="-12" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">KARNATAKA</text>
+    <text x="0" y="8" font-family="sans-serif" font-weight="800" font-size="18" fill="#fef08a" text-anchor="middle">RANK 10</text>
+    <text x="0" y="24" font-family="monospace" font-size="8" fill="#fbbf24" text-anchor="middle">PUE · 98.16%</text>
+    <line x1="48" y1="0" x2="160" y2="0" stroke="#b45309" stroke-width="1" stroke-dasharray="3 3" />
+  </g>
+
+  <!-- Right Badge: NPTEL Elite -->
+  <g transform="translate(640, 245)">
+    <circle cx="0" cy="0" r="48" fill="#120e06" stroke="#f59e0b" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#fbbf24" stroke-width="0.8" stroke-dasharray="3 3" />
+    <text x="0" y="-12" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">NPTEL ELITE</text>
+    <text x="0" y="8" font-family="sans-serif" font-weight="800" font-size="18" fill="#fef08a" text-anchor="middle">TOP 1%</text>
+    <text x="0" y="24" font-family="monospace" font-size="8" fill="#fbbf24" text-anchor="middle">MACHINE LEARNING</text>
+    <line x1="-48" y1="0" x2="-160" y2="0" stroke="#b45309" stroke-width="1" stroke-dasharray="3 3" />
+  </g>
+
+  <!-- Bottom Honor: IEEE SASIGD 2026 -->
+  <g transform="translate(400, 395)">
+    <rect x="-120" y="-18" width="240" height="36" rx="4" fill="#171208" stroke="#f59e0b" stroke-width="1.2" />
+    <text x="0" y="-2" font-family="sans-serif" font-weight="700" font-size="10" fill="#fef08a" text-anchor="middle">IEEE SASIGD 2026 HYDERABAD</text>
+    <text x="0" y="11" font-family="monospace" font-size="8" fill="#94a3b8" text-anchor="middle">ECOBAND RESEARCH PRESENTATION</text>
+  </g>
+
+  <!-- Top Honor: 3x Semester Branch Topper -->
+  <g transform="translate(400, 100)">
+    <rect x="-120" y="-18" width="240" height="36" rx="4" fill="#171208" stroke="#f59e0b" stroke-width="1.2" />
+    <text x="0" y="-2" font-family="sans-serif" font-weight="700" font-size="10" fill="#fef08a" text-anchor="middle">CSE BRANCH TOPPER (3 SEMESTERS)</text>
+    <text x="0" y="11" font-family="monospace" font-size="8" fill="#fbbf24" text-anchor="middle">RNS INSTITUTE OF TECHNOLOGY · 9.6 CGPA</text>
+  </g>
+</svg>

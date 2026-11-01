@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <radialGradient id="jn-bg" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#07192e" />
+      <stop offset="50%" stop-color="#061224" />
+      <stop offset="100%" stop-color="#050814" />
+    </radialGradient>
+    <linearGradient id="jn-timeline" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="50%" stop-color="#22d3ee" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+    <pattern id="jn-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#13243a" stroke-width="0.7" stroke-opacity="0.6"/>
+    </pattern>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#jn-bg)" />
+  <rect width="800" height="500" fill="url(#jn-grid)" opacity="0.8" />
+
+  <!-- Outer HUD Boundary & Framing -->
+  <rect x="25" y="25" width="750" height="450" fill="none" stroke="#0284c7" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="6 3" />
+  <path d="M 25 50 L 25 25 L 50 25 M 750 25 L 775 25 L 775 50 M 775 450 L 775 475 L 750 475 M 50 475 L 25 475 L 25 450" fill="none" stroke="#22d3ee" stroke-width="2.5" />
+
+  <!-- Header & Telemetry -->
+  <text x="40" y="52" font-family="monospace" font-size="11" fill="#38bdf8" letter-spacing="2" opacity="0.8">SYS.JOURNEY // CHRONOLOGY.VECTOR</text>
+  <text x="615" y="52" font-family="monospace" font-size="11" fill="#38bdf8" letter-spacing="2" opacity="0.8">MILESTONES: 2020-2027</text>
+  <text x="40" y="460" font-family="monospace" font-size="10" fill="#64748b" letter-spacing="1.5">EVOLUTION STATE: ACTIVE // CONTINUOUS UPGRADE</text>
+  <text x="640" y="460" font-family="monospace" font-size="10" fill="#22d3ee" letter-spacing="1.5">TRACK RECORD</text>
+
+  <!-- Flowing Chronological Vector Curve -->
+  <path d="M 70 250 C 180 160, 260 340, 390 230 C 500 130, 600 320, 730 220" fill="none" stroke="url(#jn-timeline)" stroke-width="3" />
+  <path d="M 70 250 C 180 160, 260 340, 390 230 C 500 130, 600 320, 730 220" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="6 6" stroke-opacity="0.6" />
+
+  <!-- Checkpoint 1: 2020 Little Rock Indian School (Class X 89.6%) -->
+  <g transform="translate(110, 225)">
+    <circle cx="0" cy="0" r="24" fill="#08152c" stroke="#0284c7" stroke-width="2" />
+    <circle cx="0" cy="0" r="14" fill="#0284c7" />
+    <text x="0" y="4" font-family="monospace" font-size="8" fill="#f8fafc" text-anchor="middle" font-weight="700">2020</text>
+    <rect x="-65" y="32" width="130" height="42" rx="3" fill="#0b172e" stroke="#0284c7" stroke-width="1" />
+    <text x="0" y="48" font-family="sans-serif" font-weight="700" font-size="9" fill="#f8fafc" text-anchor="middle">LITTLE ROCK SCH</text>
+    <text x="0" y="62" font-family="monospace" font-size="8" fill="#38bdf8" text-anchor="middle">CLASS X · 89.6%</text>
+  </g>
+
+  <!-- Checkpoint 2: 2022 MGM College (PUC II 98.16% State Rank 10) -->
+  <g transform="translate(260, 310)">
+    <circle cx="0" cy="0" r="24" fill="#08152c" stroke="#38bdf8" stroke-width="2" />
+    <circle cx="0" cy="0" r="14" fill="#38bdf8" />
+    <text x="0" y="4" font-family="monospace" font-size="8" fill="#060913" text-anchor="middle" font-weight="700">2022</text>
+    <rect x="-65" y="-62" width="130" height="45" rx="3" fill="#0b172e" stroke="#38bdf8" stroke-width="1" />
+    <text x="0" y="-46" font-family="sans-serif" font-weight="700" font-size="9" fill="#f8fafc" text-anchor="middle">MGM COLLEGE</text>
+    <text x="0" y="-34" font-family="monospace" font-size="8" fill="#fbbf24" text-anchor="middle">PUC II · 98.16%</text>
+    <text x="0" y="-23" font-family="monospace" font-size="7" fill="#22d3ee" text-anchor="middle">STATE RANK 10</text>
+  </g>
+
+  <!-- Checkpoint 3: 2023-2027 RNSIT BE CSE & IEEE CTSOC -->
+  <g transform="translate(420, 210)">
+    <circle cx="0" cy="0" r="28" fill="#08152c" stroke="#f59e0b" stroke-width="2.5" />
+    <circle cx="0" cy="0" r="16" fill="#f59e0b" />
+    <text x="0" y="4" font-family="monospace" font-size="8" fill="#060913" text-anchor="middle" font-weight="700">2023</text>
+    <rect x="-70" y="38" width="140" height="48" rx="3" fill="#0b172e" stroke="#f59e0b" stroke-width="1" />
+    <text x="0" y="54" font-family="sans-serif" font-weight="700" font-size="10" fill="#f8fafc" text-anchor="middle">RNSIT · BE CSE</text>
+    <text x="0" y="68" font-family="monospace" font-size="8" fill="#fbbf24" text-anchor="middle">CGPA 9.6 // TOPPER</text>
+    <text x="0" y="79" font-family="monospace" font-size="7" fill="#94a3b8" text-anchor="middle">IEEE CTSOC TREASURER</text>
+  </g>
+
+  <!-- Checkpoint 4: 2026 Samsung Innovation Campus & IEEE SASIGD -->
+  <g transform="translate(580, 290)">
+    <circle cx="0" cy="0" r="26" fill="#08152c" stroke="#22d3ee" stroke-width="2" />
+    <circle cx="0" cy="0" r="15" fill="#22d3ee" />
+    <text x="0" y="4" font-family="monospace" font-size="8" fill="#060913" text-anchor="middle" font-weight="700">2026</text>
+    <rect x="-75" y="-62" width="150" height="48" rx="3" fill="#0b172e" stroke="#22d3ee" stroke-width="1" />
+    <text x="0" y="-46" font-family="sans-serif" font-weight="700" font-size="9" fill="#f8fafc" text-anchor="middle">SAMSUNG INNOVATION</text>
+    <text x="0" y="-34" font-family="monospace" font-size="8" fill="#22d3ee" text-anchor="middle">IoT PROGRAMME</text>
+    <text x="0" y="-22" font-family="monospace" font-size="7" fill="#f59e0b" text-anchor="middle">IEEE SASIGD PRESENTER</text>
+  </g>
+
+  <!-- Forward Vector to 2027 -->
+  <g transform="translate(710, 220)">
+    <circle cx="0" cy="0" r="20" fill="#08152c" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3 3" />
+    <circle cx="0" cy="0" r="8" fill="#f59e0b" />
+    <text x="0" y="32" font-family="monospace" font-size="8" fill="#fbbf24" text-anchor="middle">GRADUATION</text>
+    <text x="0" y="44" font-family="monospace" font-size="8" fill="#f8fafc" text-anchor="middle">2027</text>
+  </g>
+</svg>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Menu, X, Terminal as TerminalIcon, Sparkles, RotateCw } from 'lucide-react'
-import { useExploration } from '../../context/ExplorationContext'
+import { useExploration } from '../../context/useExploration'
 
 interface NavbarProps {
   onOpenTerminal?: () => void

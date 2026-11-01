@@ -1,36 +1,13 @@
-import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import React, { useEffect, useState, useCallback, type ReactNode } from 'react'
 import { DISCOVERY_BADGES } from '../data/badges'
 import type { DiscoveryBadge } from '../types'
-
-
-interface ExplorationState {
-  visitedPortals: string[]
-  visitedProjects: string[]
-  interactedSkills: boolean
-  inspectedAchievements: boolean
-  discoveredSecret: boolean
-  unlockedBadges: string[]
-  latestBadge: DiscoveryBadge | null
-  dismissNotification: () => void
-  markPortalVisited: (portalId: string) => void
-  markProjectVisited: (projectId: string) => void
-  markSkillsInteracted: () => void
-  markAchievementsInspected: () => void
-  markSecretDiscovered: () => void
-  resetProgress: () => void
-  isPortalVisited: (portalId: string) => boolean
-  discoveredPortalsCount: number
-  totalPortalsCount: number
-  unlockedBadgesCount: number
-  totalBadgesCount: number
-}
+import {
+  ExplorationContext,
+  ALL_PORTALS,
+  ALL_PROJECTS
+} from './explorationContextDef'
 
 const STORAGE_KEY = 'aishwarya_exe_exploration_state_v1'
-
-const ExplorationContext = createContext<ExplorationState | undefined>(undefined)
-
-const ALL_PORTALS = ['identity', 'skills', 'projects', 'achievements', 'journey', 'connect']
-const ALL_PROJECTS = ['ecommerce', 'csv-platform', 'facial-analysis', 'ecoband']
 
 export const ExplorationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [visitedPortals, setVisitedPortals] = useState<string[]>(() => {
@@ -78,7 +55,22 @@ export const ExplorationProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [unlockedBadges, setUnlockedBadges] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem(`${STORAGE_KEY}_badges`)
-      return saved ? JSON.parse(saved) : []
+      if (saved) return JSON.parse(saved)
+
+      // Fallback: populate unlocked badges from saved interaction state
+      const portals: string[] = JSON.parse(localStorage.getItem(`${STORAGE_KEY}_portals`) || '[]')
+      const projects: string[] = JSON.parse(localStorage.getItem(`${STORAGE_KEY}_projects`) || '[]')
+      const skills = localStorage.getItem(`${STORAGE_KEY}_skills`) === 'true'
+      const achievements = localStorage.getItem(`${STORAGE_KEY}_achievements`) === 'true'
+      const secret = localStorage.getItem(`${STORAGE_KEY}_secret`) === 'true'
+
+      const initialBadges: string[] = []
+      if (ALL_PORTALS.every((p) => portals.includes(p))) initialBadges.push('universe_explorer')
+      if (ALL_PROJECTS.every((p) => projects.includes(p))) initialBadges.push('project_investigator')
+      if (skills) initialBadges.push('tech_explorer')
+      if (achievements) initialBadges.push('milestone_hunter')
+      if (secret) initialBadges.push('secret_developer')
+      return initialBadges
     } catch {
       return []
     }
@@ -86,7 +78,7 @@ export const ExplorationProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const [latestBadge, setLatestBadge] = useState<DiscoveryBadge | null>(null)
 
-  // Sync to localStorage
+  // Sync state to localStorage safely
   useEffect(() => {
     try {
       localStorage.setItem(`${STORAGE_KEY}_portals`, JSON.stringify(visitedPortals))
@@ -136,84 +128,79 @@ export const ExplorationProvider: React.FC<{ children: ReactNode }> = ({ childre
   }, [unlockedBadges])
 
   // Badge trigger helper
-  const unlockBadge = (badgeId: string) => {
-    if (!unlockedBadges.includes(badgeId)) {
-      setUnlockedBadges((prev) => [...prev, badgeId])
+  const unlockBadge = useCallback((badgeId: string) => {
+    setUnlockedBadges((prev) => {
+      if (prev.includes(badgeId)) return prev
       const badge = DISCOVERY_BADGES.find((b) => b.id === badgeId)
       if (badge) {
         setLatestBadge(badge)
       }
-    }
-  }
+      return [...prev, badgeId]
+    })
+  }, [])
 
-  // Check UNIVERSE EXPLORER (all 6 portals visited)
-  useEffect(() => {
-    const hasAllPortals = ALL_PORTALS.every((p) => visitedPortals.includes(p))
-    if (hasAllPortals) {
-      unlockBadge('universe_explorer')
-    }
-  }, [visitedPortals])
+  const markPortalVisited = useCallback((portalId: string) => {
+    setVisitedPortals((prev) => {
+      if (prev.includes(portalId)) return prev
+      const updated = [...prev, portalId]
+      if (ALL_PORTALS.every((p) => updated.includes(p))) {
+        unlockBadge('universe_explorer')
+      }
+      return updated
+    })
+  }, [unlockBadge])
 
-  // Check PROJECT INVESTIGATOR (all 4 projects visited)
-  useEffect(() => {
-    const hasAllProjects = ALL_PROJECTS.every((p) => visitedProjects.includes(p))
-    if (hasAllProjects) {
-      unlockBadge('project_investigator')
-    }
-  }, [visitedProjects])
+  const markProjectVisited = useCallback((projectId: string) => {
+    setVisitedProjects((prev) => {
+      if (prev.includes(projectId)) return prev
+      const updated = [...prev, projectId]
+      if (ALL_PROJECTS.every((p) => updated.includes(p))) {
+        unlockBadge('project_investigator')
+      }
+      return updated
+    })
+  }, [unlockBadge])
 
-  // Check TECH EXPLORER
-  useEffect(() => {
-    if (interactedSkills) {
-      unlockBadge('tech_explorer')
-    }
-  }, [interactedSkills])
+  const markSkillsInteracted = useCallback(() => {
+    setInteractedSkills((prev) => {
+      if (!prev) {
+        unlockBadge('tech_explorer')
+        return true
+      }
+      return prev
+    })
+  }, [unlockBadge])
 
-  // Check MILESTONE HUNTER
-  useEffect(() => {
-    if (inspectedAchievements) {
-      unlockBadge('milestone_hunter')
-    }
-  }, [inspectedAchievements])
+  const markAchievementsInspected = useCallback(() => {
+    setInspectedAchievements((prev) => {
+      if (!prev) {
+        unlockBadge('milestone_hunter')
+        return true
+      }
+      return prev
+    })
+  }, [unlockBadge])
 
-  // Check SECRET DEVELOPER
-  useEffect(() => {
-    if (discoveredSecret) {
-      unlockBadge('secret_developer')
-    }
-  }, [discoveredSecret])
+  const markSecretDiscovered = useCallback(() => {
+    setDiscoveredSecret((prev) => {
+      if (!prev) {
+        unlockBadge('secret_developer')
+        return true
+      }
+      return prev
+    })
+  }, [unlockBadge])
 
-  const markPortalVisited = (portalId: string) => {
-    if (!visitedPortals.includes(portalId)) {
-      setVisitedPortals((prev) => [...prev, portalId])
-    }
-  }
-
-  const markProjectVisited = (projectId: string) => {
-    if (!visitedProjects.includes(projectId)) {
-      setVisitedProjects((prev) => [...prev, projectId])
-    }
-  }
-
-  const markSkillsInteracted = () => {
-    setInteractedSkills(true)
-  }
-
-  const markAchievementsInspected = () => {
-    setInspectedAchievements(true)
-  }
-
-  const markSecretDiscovered = () => {
-    setDiscoveredSecret(true)
-  }
-
-  const dismissNotification = () => {
+  const dismissNotification = useCallback(() => {
     setLatestBadge(null)
-  }
+  }, [])
 
-  const isPortalVisited = (portalId: string) => visitedPortals.includes(portalId)
+  const isPortalVisited = useCallback(
+    (portalId: string) => visitedPortals.includes(portalId),
+    [visitedPortals]
+  )
 
-  const resetProgress = () => {
+  const resetProgress = useCallback(() => {
     setVisitedPortals([])
     setVisitedProjects([])
     setInteractedSkills(false)
@@ -231,7 +218,7 @@ export const ExplorationProvider: React.FC<{ children: ReactNode }> = ({ childre
     } catch {
       // ignore
     }
-  }
+  }, [])
 
   return (
     <ExplorationContext.Provider
@@ -260,12 +247,4 @@ export const ExplorationProvider: React.FC<{ children: ReactNode }> = ({ childre
       {children}
     </ExplorationContext.Provider>
   )
-}
-
-export const useExploration = () => {
-  const context = useContext(ExplorationContext)
-  if (!context) {
-    throw new Error('useExploration must be used within an ExplorationProvider')
-  }
-  return context
 }

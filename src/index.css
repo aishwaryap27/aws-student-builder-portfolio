@@ -194,3 +194,53 @@
   transform-style: preserve-3d;
   transition: transform 0.15s ease-out;
 }
+
+/* Scrollbar None Utility for Horizontal Filter Bars */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Badge Toast Pop Animation */
+@keyframes bounce-subtle {
+  0% {
+    transform: translateY(24px) scale(0.96);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(-4px) scale(1.02);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Global Reduced Motion Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .card-perspective-inner {
+    transform: none !important;
+    transition: none !important;
+  }
+  .animate-bounce-subtle {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

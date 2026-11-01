@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import type { PortalItem } from '../../types'
-import { useExploration } from '../../context/ExplorationContext'
+import { useExploration } from '../../context/useExploration'
 
 interface PortalCardProps {
   portal: PortalItem

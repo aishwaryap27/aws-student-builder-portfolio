@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { X, Terminal as TerminalIcon, CornerDownLeft, Sparkles } from 'lucide-react'
-import { useExploration } from '../../context/ExplorationContext'
+import { useExploration } from '../../context/useExploration'
 import { PROFILE_DATA } from '../../data/profile'
 
 interface TerminalModalProps {
@@ -313,6 +313,9 @@ export const TerminalModal: React.FC<TerminalModalProps> = ({ isOpen, onClose })
       role="dialog"
       aria-modal="true"
       aria-labelledby="terminal-modal-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
     >
       <div className="relative w-full max-w-2xl bg-[#070b16] border border-cyan-500/40 rounded-lg shadow-[0_0_40px_rgba(6,182,212,0.15)] flex flex-col h-[520px] max-h-[85vh] font-mono-code text-sm overflow-hidden">
         

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { BackToHub } from '../components/navigation/BackToHub'
 import { PROFILE_DATA } from '../data/profile'
-import { useExploration } from '../context/ExplorationContext'
+import { useExploration } from '../context/useExploration'
 import { User, Award, GraduationCap, ChevronDown, ChevronUp, Cpu, Copy, Check, Server, Eye, FileSpreadsheet, ShieldCheck } from 'lucide-react'
 
 

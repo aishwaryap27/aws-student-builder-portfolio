@@ -3,17 +3,18 @@ import { Link } from 'react-router-dom'
 import { BackToHub } from '../components/navigation/BackToHub'
 import { SKILL_CATEGORIES, SKILLS_DATA } from '../data/skills'
 import type { SkillItem } from '../types'
-import { useExploration } from '../context/ExplorationContext'
+import { useExploration } from '../context/useExploration'
 import { ArrowRight, Sparkles, Filter, Link as LinkIcon, CheckCircle2, Search, Network, Grid3X3 } from 'lucide-react'
 
 // Helper to get direct project route
-const getProjectRoute = (connection?: string): string => {
-  if (!connection) return '/projects'
-  if (connection.includes('E-Commerce')) return '/projects/ecommerce'
-  if (connection.includes('CSV')) return '/projects/csv-platform'
-  if (connection.includes('Facial')) return '/projects/facial-analysis'
-  if (connection.includes('EcoBand')) return '/projects/ecoband'
-  return '/projects'
+const getProjectRoute = (connection?: string): { route: string; label: string } => {
+  if (!connection) return { route: '/projects', label: 'Launch Project Lab' }
+  if (connection.includes('E-Commerce')) return { route: '/projects/ecommerce', label: 'Launch E-Commerce Lab' }
+  if (connection.includes('CSV')) return { route: '/projects/csv-platform', label: 'Launch CSV Platform Lab' }
+  if (connection.includes('Facial')) return { route: '/projects/facial-analysis', label: 'Launch Vision Lab' }
+  if (connection.includes('EcoBand')) return { route: '/projects/ecoband', label: 'Launch EcoBand Lab' }
+  if (connection.includes('Samsung')) return { route: '/journey', label: 'View Samsung IoT Milestone' }
+  return { route: '/projects', label: 'Launch Project Lab' }
 }
 
 export const SkillsPage: React.FC = () => {
@@ -323,13 +324,18 @@ export const SkillsPage: React.FC = () => {
                     <p className="text-xs font-semibold text-white font-sans mb-3">
                       {activeSkill.projectConnection}
                     </p>
-                    <Link
-                      to={getProjectRoute(activeSkill.projectConnection)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-amber-500 text-slate-950 font-bold text-xs hover:bg-amber-400 transition-colors"
-                    >
-                      <span>Launch Project Lab</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
+                    {(() => {
+                      const link = getProjectRoute(activeSkill.projectConnection)
+                      return (
+                        <Link
+                          to={link.route}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-amber-500 text-slate-950 font-bold text-xs hover:bg-amber-400 transition-colors"
+                        >
+                          <span>{link.label}</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      )
+                    })()}
                   </div>
                 )}
               </div>

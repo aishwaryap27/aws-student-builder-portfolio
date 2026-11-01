@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, Link, Navigate } from 'react-router-dom'
 import { BackToHub } from '../components/navigation/BackToHub'
 import { PROJECTS_DATA } from '../data/projects'
-import { useExploration } from '../context/ExplorationContext'
+import { useExploration } from '../context/useExploration'
 import { ArrowLeft, CheckCircle2, AlertCircle, Cpu, Layers, Workflow, Terminal as TerminalIcon, ShieldAlert, Play, Activity } from 'lucide-react'
 
 

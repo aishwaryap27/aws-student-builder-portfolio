@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { BackToHub } from '../components/navigation/BackToHub'
 import { ACHIEVEMENTS_DATA } from '../data/achievements'
 import type { AchievementItem } from '../types'
-import { useExploration } from '../context/ExplorationContext'
+import { useExploration } from '../context/useExploration'
 import { Award, ChevronDown, ChevronUp, Filter, Sparkles, CheckCircle2, ShieldCheck, Search } from 'lucide-react'
 
 export const AchievementsPage: React.FC = () => {

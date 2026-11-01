@@ -1,30 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import { BackToHub } from '../components/navigation/BackToHub'
 import { JOURNEY_DATA } from '../data/journey'
-import { useExploration } from '../context/ExplorationContext'
+import { useExploration } from '../context/useExploration'
 import { ChevronDown, ChevronUp, Clock, Filter } from 'lucide-react'
 
 
 export const JourneyPage: React.FC = () => {
   const { markPortalVisited } = useExploration()
-  const [expandedIndices, setExpandedIndices] = useState<number[]>([0, 1, 2])
+  const [expandedTitles, setExpandedTitles] = useState<string[]>(() => [
+    JOURNEY_DATA[0]?.title || '',
+    JOURNEY_DATA[1]?.title || '',
+    JOURNEY_DATA[2]?.title || ''
+  ])
   const [selectedCategory, setSelectedCategory] = useState<string>('All')
 
   useEffect(() => {
     markPortalVisited('journey')
   }, [markPortalVisited])
 
-  const toggleMilestone = (idx: number) => {
-    setExpandedIndices((prev) =>
-      prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
+  const toggleMilestone = (title: string) => {
+    setExpandedTitles((prev) =>
+      prev.includes(title) ? prev.filter((t) => t !== title) : [...prev, title]
     )
   }
 
   const toggleAll = () => {
-    if (expandedIndices.length === JOURNEY_DATA.length) {
-      setExpandedIndices([])
+    if (expandedTitles.length === JOURNEY_DATA.length) {
+      setExpandedTitles([])
     } else {
-      setExpandedIndices(JOURNEY_DATA.map((_, i) => i))
+      setExpandedTitles(JOURNEY_DATA.map((m) => m.title))
     }
   }
 
@@ -62,7 +66,7 @@ export const JourneyPage: React.FC = () => {
               onClick={toggleAll}
               className="px-3 py-1.5 rounded bg-slate-900 border border-slate-700 hover:border-cyan-400 text-xs text-slate-300 hover:text-white transition-colors cursor-pointer"
             >
-              {expandedIndices.length === JOURNEY_DATA.length ? 'Collapse All' : 'Expand All'}
+              {expandedTitles.length === JOURNEY_DATA.length ? 'Collapse All' : 'Expand All'}
             </button>
 
             <div className="flex items-center gap-2 text-xs text-cyan-400 bg-cyan-950/30 border border-cyan-500/30 px-3 py-1.5 rounded">
@@ -96,7 +100,7 @@ export const JourneyPage: React.FC = () => {
         {/* Timeline Vector Spine */}
         <div className="relative pl-6 sm:pl-8 border-l-2 border-slate-800 space-y-8 my-6">
           {filteredData.map((milestone, idx) => {
-            const isExpanded = expandedIndices.includes(idx)
+            const isExpanded = expandedTitles.includes(milestone.title)
             return (
               <div key={idx} className="relative group">
                 
@@ -114,7 +118,7 @@ export const JourneyPage: React.FC = () => {
                   }`}
                 >
                   <button
-                    onClick={() => toggleMilestone(idx)}
+                    onClick={() => toggleMilestone(milestone.title)}
                     className="w-full p-5 text-left flex items-start sm:items-center justify-between gap-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
                     aria-expanded={isExpanded}
                   >

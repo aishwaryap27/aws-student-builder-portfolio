@@ -1,7 +1,7 @@
 import React from 'react'
 import { X, Award, Compass, Layers, Cpu, Terminal as TerminalIcon, CheckCircle2, Lock } from 'lucide-react'
 import { DISCOVERY_BADGES } from '../../data/badges'
-import { useExploration } from '../../context/ExplorationContext'
+import { useExploration } from '../../context/useExploration'
 
 interface BadgeDrawerProps {
   isOpen: boolean
@@ -27,6 +27,9 @@ export const BadgeDrawer: React.FC<BadgeDrawerProps> = ({ isOpen, onClose }) => 
       role="dialog"
       aria-modal="true"
       aria-labelledby="badge-drawer-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
     >
       <div className="relative w-full max-w-xl bg-[#0a0f1d] border border-slate-700/80 rounded-lg shadow-2xl p-6 font-mono-code text-sm">
         

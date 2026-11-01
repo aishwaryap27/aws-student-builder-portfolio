@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { BackToHub } from '../components/navigation/BackToHub'
 import { PROFILE_DATA } from '../data/profile'
-import { useExploration } from '../context/ExplorationContext'
+import { useExploration } from '../context/useExploration'
 import { Mail, Copy, Check, ExternalLink, Send, MessageSquare } from 'lucide-react'
 
 

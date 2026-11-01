@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { BackToHub } from '../components/navigation/BackToHub'
 import { PROJECTS_DATA } from '../data/projects'
-import { useExploration } from '../context/ExplorationContext'
+import { useExploration } from '../context/useExploration'
 import { ProblemSolverScanner } from '../components/features/ProblemSolverScanner'
 import { ArrowRight, Cpu, Server, FileSpreadsheet, Eye, CheckCircle2 } from 'lucide-react'
 

@@ -39,7 +39,7 @@ export const CinematicBootSequence: React.FC<CinematicBootSequenceProps> = ({ on
     return t
   }
 
-  const handleFinish = () => {
+  const handleFinish = React.useCallback(() => {
     setIsFadingOut(true)
     setTimeout(() => {
       try {
@@ -49,13 +49,13 @@ export const CinematicBootSequence: React.FC<CinematicBootSequenceProps> = ({ on
       }
       onComplete()
     }, 600)
-  }
+  }, [onComplete])
 
   // Check prefers-reduced-motion
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches && !isReplay) {
-      handleFinish()
-      return
+      const skipTimer = setTimeout(handleFinish, 0)
+      return () => clearTimeout(skipTimer)
     }
 
     // Step 1 -> Step 2 (Node expansion): 400ms
@@ -111,11 +111,12 @@ export const CinematicBootSequence: React.FC<CinematicBootSequenceProps> = ({ on
     }
     window.addEventListener('keydown', handleKeyDown)
 
+    const activeTimers = timersRef.current
     return () => {
-      timersRef.current.forEach(clearTimeout)
+      activeTimers.forEach(clearTimeout)
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [isReplay])
+  }, [isReplay, handleFinish])
 
   return (
     <div

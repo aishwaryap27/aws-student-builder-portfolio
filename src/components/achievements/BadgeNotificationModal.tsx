@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Sparkles, X, Award } from 'lucide-react'
-import { useExploration } from '../../context/ExplorationContext'
+import { useExploration } from '../../context/useExploration'
 
 export const BadgeNotificationModal: React.FC = () => {
   const { latestBadge, dismissNotification } = useExploration()

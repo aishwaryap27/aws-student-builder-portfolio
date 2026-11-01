@@ -1,6 +1,6 @@
 import React from 'react'
 import { Sparkles, RotateCcw } from 'lucide-react'
-import { useExploration } from '../../context/ExplorationContext'
+import { useExploration } from '../../context/useExploration'
 
 interface ExplorationProgressProps {
   onOpenBadges?: () => void

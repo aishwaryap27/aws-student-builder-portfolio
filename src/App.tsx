@@ -6,6 +6,8 @@ import { Footer } from './components/navigation/Footer'
 import { TerminalModal } from './components/terminal/TerminalModal'
 import { BadgeDrawer } from './components/achievements/BadgeDrawer'
 import { BadgeNotificationModal } from './components/achievements/BadgeNotificationModal'
+import { CinematicBootSequence } from './components/cinematic/CinematicBootSequence'
+import { LivingUniverseBackground } from './components/cinematic/LivingUniverseBackground'
 import { HomePage } from './pages/HomePage'
 import { IdentityPage } from './pages/IdentityPage'
 import { SkillsPage } from './pages/SkillsPage'
@@ -27,6 +29,16 @@ const ScrollToTop = () => {
 function MainLayout() {
   const [terminalOpen, setTerminalOpen] = useState(false)
   const [badgesOpen, setBadgesOpen] = useState(false)
+  
+  // Cinematic Boot Sequence: Run once per browser session
+  const [showBootSequence, setShowBootSequence] = useState<boolean>(() => {
+    try {
+      return sessionStorage.getItem('aishwarya_boot_seen') !== 'true'
+    } catch {
+      return false
+    }
+  })
+  const [isReplayingBoot, setIsReplayingBoot] = useState<boolean>(false)
 
   // Global Ctrl + K listener
   useEffect(() => {
@@ -40,18 +52,40 @@ function MainLayout() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
+  const triggerReplayBoot = () => {
+    setIsReplayingBoot(true)
+    setShowBootSequence(true)
+  }
+
+  const handleBootComplete = () => {
+    setShowBootSequence(false)
+    setIsReplayingBoot(false)
+  }
+
   return (
-    <div className="min-h-screen bg-[#060913] text-[#f8fafc] flex flex-col font-sans selection:bg-amber-500/20 selection:text-amber-300">
+    <div className="relative min-h-screen bg-[#060913] text-[#f8fafc] flex flex-col font-sans selection:bg-amber-500/20 selection:text-amber-300 overflow-x-hidden">
       <ScrollToTop />
+
+      {/* Living Digital Universe Animated Canvas & Atmosphere */}
+      <LivingUniverseBackground />
+
+      {/* Cinematic Boot Sequence Overlay */}
+      {showBootSequence && (
+        <CinematicBootSequence
+          onComplete={handleBootComplete}
+          isReplay={isReplayingBoot}
+        />
+      )}
       
       {/* Top Navbar */}
       <Navbar
         onOpenTerminal={() => setTerminalOpen(true)}
         onOpenBadges={() => setBadgesOpen(true)}
+        onReplayBoot={triggerReplayBoot}
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="relative z-10 flex-1 flex flex-col">
         <Routes>
           <Route
             path="/"
@@ -96,6 +130,7 @@ function MainLayout() {
       <Footer
         onOpenTerminal={() => setTerminalOpen(true)}
         onOpenBadges={() => setBadgesOpen(true)}
+        onReplayBoot={triggerReplayBoot}
       />
     </div>
   )

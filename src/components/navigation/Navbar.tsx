@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Terminal as TerminalIcon, Sparkles } from 'lucide-react'
+import { Menu, X, Terminal as TerminalIcon, Sparkles, RotateCw } from 'lucide-react'
 import { useExploration } from '../../context/ExplorationContext'
 
 interface NavbarProps {
   onOpenTerminal?: () => void
   onOpenBadges?: () => void
+  onReplayBoot?: () => void
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal, onOpenBadges }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal, onOpenBadges, onReplayBoot }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
   const { unlockedBadgesCount, totalBadgesCount } = useExploration()
@@ -96,13 +97,26 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal, onOpenBadges }) 
           {/* Quick Terminal Trigger */}
           <button
             onClick={onOpenTerminal}
-            className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-900/80 border border-slate-700/60 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-300 text-xs font-mono-code transition-colors"
+            className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-900/80 border border-slate-700/60 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-300 text-xs font-mono-code transition-colors cursor-pointer"
             title="Open Interactive Terminal (Ctrl + K)"
             aria-label="Open Interactive CLI Terminal"
           >
             <TerminalIcon className="w-3.5 h-3.5 text-cyan-400" />
             <span className="text-[11px] text-slate-400">Ctrl+K</span>
           </button>
+
+          {/* Replay Cinematic Boot Sequence Trigger */}
+          {onReplayBoot && (
+            <button
+              onClick={onReplayBoot}
+              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-900/80 border border-slate-700/60 hover:border-cyan-500/40 text-slate-400 hover:text-cyan-300 text-xs font-mono-code transition-colors cursor-pointer"
+              title="Replay Cinematic Boot Sequence"
+              aria-label="Replay Cinematic Boot Sequence"
+            >
+              <RotateCw className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Boot</span>
+            </button>
+          )}
 
           {/* Glowing Green Indicator: SYSTEM ONLINE */}
           <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 text-xs font-mono-code">

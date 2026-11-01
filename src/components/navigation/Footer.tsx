@@ -1,13 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Sparkles, Terminal as TerminalIcon } from 'lucide-react'
+import { Sparkles, Terminal as TerminalIcon, RotateCw } from 'lucide-react'
 
 interface FooterProps {
   onOpenTerminal?: () => void
   onOpenBadges?: () => void
+  onReplayBoot?: () => void
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenTerminal, onOpenBadges }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenTerminal, onOpenBadges, onReplayBoot }) => {
   return (
     <footer className="w-full border-t border-slate-800/80 bg-[#060913] py-8 px-4 sm:px-6 lg:px-8 mt-auto">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 font-mono-code text-xs text-slate-400">
@@ -34,11 +35,20 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal, onOpenBadges }) 
           </button>
           <button
             onClick={onOpenTerminal}
-            className="hover:text-cyan-400 transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400"
+            className="hover:text-cyan-400 transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400 cursor-pointer"
           >
             <TerminalIcon className="w-3 h-3 text-cyan-400" />
             <span>Terminal</span>
           </button>
+          {onReplayBoot && (
+            <button
+              onClick={onReplayBoot}
+              className="hover:text-cyan-400 transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400 cursor-pointer"
+            >
+              <RotateCw className="w-3 h-3 text-cyan-400" />
+              <span>Replay Boot</span>
+            </button>
+          )}
           <Link
             to="/connect"
             className="hover:text-white transition-colors text-slate-400"

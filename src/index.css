@@ -120,3 +120,77 @@
 .beacon-pulse {
   animation: beacon-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* Cinematic Holographic Glass */
+.hologram-glass {
+  background: rgba(10, 15, 29, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+/* Subtle Perspective Grid */
+.perspective-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+}
+
+/* Radar Sweep Line */
+@keyframes radar-sweep {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+.radar-sweep-beam {
+  animation: radar-sweep 10s ease-in-out infinite;
+}
+
+/* Controlled Glitch Animation for Boot Sequence */
+@keyframes glitch-skew {
+  0% {
+    transform: skew(0deg);
+  }
+  20% {
+    transform: skew(-2deg);
+  }
+  40% {
+    transform: skew(2deg);
+  }
+  60% {
+    transform: skew(-1deg);
+  }
+  80% {
+    transform: skew(1deg);
+  }
+  100% {
+    transform: skew(0deg);
+  }
+}
+
+.glitch-active {
+  animation: glitch-skew 0.4s ease-in-out;
+}
+
+/* Card 3D perspective wrapper */
+.card-perspective-container {
+  perspective: 1200px;
+}
+
+.card-perspective-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out;
+}

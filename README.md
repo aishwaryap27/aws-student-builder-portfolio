@@ -135,8 +135,8 @@ This guarantees direct deep links (e.g. `https://domain.com/projects/ecoband`) r
 ### Setup Commands
 ```bash
 # Clone the repository
-git clone https://github.com/aishwaryap27/aishwarya-exe-portfolio.git
-cd aishwarya-exe-portfolio
+git clone https://github.com/aishwaryap27/aws-student-builder-portfolio.git
+cd aws-student-builder-portfolio
 
 # Install dependencies
 npm install

@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { BackToHub } from '../components/navigation/BackToHub'
 import { PROFILE_DATA } from '../data/profile'
 import { useExploration } from '../context/ExplorationContext'
-import { User, Award, GraduationCap, ChevronDown, ChevronUp, Cpu, CheckCircle2 } from 'lucide-react'
+import { User, Award, GraduationCap, ChevronDown, ChevronUp, Cpu, Copy, Check, Server, Eye, FileSpreadsheet, ShieldCheck } from 'lucide-react'
+
 
 export const IdentityPage: React.FC = () => {
   const { markPortalVisited } = useExploration()
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0)
+  const [copiedBio, setCopiedBio] = useState(false)
+  const [activeDomain, setActiveDomain] = useState<'backend' | 'iot' | 'data' | 'cv'>('backend')
 
   useEffect(() => {
     markPortalVisited('identity')
@@ -14,6 +17,40 @@ export const IdentityPage: React.FC = () => {
 
   const toggleEducation = (idx: number) => {
     setExpandedIndex(expandedIndex === idx ? null : idx)
+  }
+
+  const copyProfileSummary = () => {
+    const text = `${PROFILE_DATA.fullName} — ${PROFILE_DATA.tagline}\n\n${PROFILE_DATA.summary}\n\nEducation: BE CSE at RNS Institute of Technology (VTU) · CGPA: 9.6/10 · State Rank: 10\nEmail: ${PROFILE_DATA.email}`
+    navigator.clipboard.writeText(text)
+    setCopiedBio(true)
+    setTimeout(() => setCopiedBio(false), 2000)
+  }
+
+  const domainBriefs = {
+    backend: {
+      title: 'Backend Engineering & Distributed Architectures',
+      icon: <Server className="w-4 h-4 text-cyan-400" />,
+      desc: 'Building autonomous, decoupled microservices in Java and Spring Boot. Leveraging Spring Data JPA, Hibernate, and independent MySQL instances to enforce strict domain boundaries, with Spring Cloud Gateway and Eureka for resilient inter-service routing.',
+      technologies: ['Java', 'Spring Boot', 'REST APIs', 'Spring Data JPA', 'Hibernate', 'Microservices', 'MySQL']
+    },
+    iot: {
+      title: 'IoT & Hardware-Software Interfacing',
+      icon: <Cpu className="w-4 h-4 text-amber-400" />,
+      desc: 'Developing embedded firmware on ESP32 microcontrollers with real-time sensor fusion. Experienced in interfacing HC-SR04 ultrasonic distance sensors, strain-gauge load cells with HX711 amplifiers, and participating in the Samsung Innovation Campus IoT Program.',
+      technologies: ['ESP32', 'ESP32-CAM', 'Ultrasonic Sensors', 'Load Cell (HX711)', 'DHT11', 'Hardware Interfacing']
+    },
+    data: {
+      title: 'Data Quality & Pipeline Engineering',
+      icon: <FileSpreadsheet className="w-4 h-4 text-emerald-400" />,
+      desc: 'Constructing automated data profiling and validation backends in Python and FastAPI. Implementing deterministic missing-value detection, statistical median/mode imputation, and duplicate removal containerized inside Docker for consistent cloud deployment.',
+      technologies: ['Python', 'FastAPI', 'Pandas', 'NumPy', 'Docker', 'Render']
+    },
+    cv: {
+      title: 'Computer Vision & Landmark Geometry',
+      icon: <Eye className="w-4 h-4 text-cyan-300" />,
+      desc: 'Extracting 3D facial mesh geometries using OpenCV and MediaPipe. Computing ocular and oral aspect ratios (EAR & MAR) over temporal sliding windows to analyze behavioral patterns such as sustained eye closure and yawning.',
+      technologies: ['Python', 'OpenCV', 'MediaPipe', 'EAR Geometry', 'MAR Metrics', 'Temporal Algorithms']
+    }
   }
 
   return (
@@ -37,9 +74,29 @@ export const IdentityPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-amber-400 bg-amber-950/30 border border-amber-500/30 px-3 py-1.5 rounded self-start md:self-auto">
-            <CheckCircle2 className="w-4 h-4" />
-            <span>RECORD VERIFIED // AWS CHALLENGE 2026</span>
+          <div className="flex items-center gap-3 self-start md:self-auto">
+            <button
+              onClick={copyProfileSummary}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-slate-900 border border-slate-700/80 hover:border-cyan-400 text-slate-300 hover:text-white text-xs transition-colors cursor-pointer"
+              title="Copy Briefing to Clipboard"
+            >
+              {copiedBio ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-emerald-400">Briefing Copied</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Copy Candidate Brief</span>
+                </>
+              )}
+            </button>
+
+            <div className="flex items-center gap-2 text-xs text-amber-400 bg-amber-950/30 border border-amber-500/30 px-3 py-1.5 rounded">
+              <ShieldCheck className="w-4 h-4" />
+              <span>VERIFIED DOSSIER</span>
+            </div>
           </div>
         </div>
 
@@ -157,6 +214,58 @@ export const IdentityPage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Interactive Domain Architecture Focus Switcher */}
+        <section className="bg-[#0a0f1d] border border-slate-800 rounded-lg p-6 sm:p-8 mb-10">
+          <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+            <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold">
+              <Cpu className="w-4 h-4" />
+              <span>CORE ARCHITECTURAL DOMAIN PROFILES</span>
+            </div>
+            <span className="text-[11px] text-slate-500">SELECT TO EXPLORE PILLARS</span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
+            {(['backend', 'iot', 'data', 'cv'] as const).map((key) => {
+              const d = domainBriefs[key]
+              const isSelected = activeDomain === key
+              return (
+                <button
+                  key={key}
+                  onClick={() => setActiveDomain(key)}
+                  className={`p-3 rounded border text-left transition-all cursor-pointer flex items-center gap-2.5 ${
+                    isSelected
+                      ? 'bg-cyan-950/40 border-cyan-400 text-white shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+                      : 'bg-[#070b16] border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                  }`}
+                >
+                  {d.icon}
+                  <span className="text-xs font-bold uppercase truncate">{key}</span>
+                </button>
+              )
+            })}
+          </div>
+
+          <div className="p-5 rounded bg-[#070b16] border border-cyan-500/30 space-y-4">
+            <div className="flex items-center gap-2 text-amber-400 text-sm font-bold">
+              {domainBriefs[activeDomain].icon}
+              <span>{domainBriefs[activeDomain].title}</span>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-300 font-sans leading-relaxed">
+              {domainBriefs[activeDomain].desc}
+            </p>
+            <div>
+              <span className="text-[11px] text-slate-500 block mb-2 font-mono-code">REPRESENTATIVE TECHNOLOGIES:</span>
+              <div className="flex flex-wrap gap-1.5">
+                {domainBriefs[activeDomain].technologies.map((t) => (
+                  <span key={t} className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-cyan-300 text-[11px]">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Interactive Education Timeline */}
         <section className="bg-[#0a0f1d] border border-slate-800 rounded-lg p-6 sm:p-8">

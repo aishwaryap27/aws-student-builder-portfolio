@@ -1,14 +1,27 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, Link, Navigate } from 'react-router-dom'
 import { BackToHub } from '../components/navigation/BackToHub'
 import { PROJECTS_DATA } from '../data/projects'
 import { useExploration } from '../context/ExplorationContext'
-import { ArrowLeft, CheckCircle2, AlertCircle, Cpu, Layers, Workflow, Terminal as TerminalIcon, ShieldAlert } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, AlertCircle, Cpu, Layers, Workflow, Terminal as TerminalIcon, ShieldAlert, Play, Activity } from 'lucide-react'
 
 
 export const ProjectDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>()
   const { markProjectVisited } = useExploration()
+
+  // Interactive state for E-Commerce simulation
+  const [ecomSimulationStep, setEcomSimulationStep] = useState<number>(0)
+  const [isEcomSimulating, setIsEcomSimulating] = useState(false)
+
+  // Interactive state for CSV Platform simulation
+  const [csvActiveStage, setCsvActiveStage] = useState<number>(1)
+
+  // Interactive state for Facial Analysis simulator
+  const [faceState, setFaceState] = useState<'alert' | 'blink' | 'drowsy' | 'yawn'>('alert')
+
+  // Interactive state for EcoBand simulator
+  const [binFill, setBinFill] = useState<number>(68)
 
   const project = PROJECTS_DATA.find((p) => p.slug === slug)
 
@@ -17,6 +30,19 @@ export const ProjectDetailPage: React.FC = () => {
       markProjectVisited(project.slug)
     }
   }, [project, markProjectVisited])
+
+  const runEcomSimulation = () => {
+    setIsEcomSimulating(true)
+    setEcomSimulationStep(1)
+
+    setTimeout(() => setEcomSimulationStep(2), 700)
+    setTimeout(() => setEcomSimulationStep(3), 1400)
+    setTimeout(() => setEcomSimulationStep(4), 2100)
+    setTimeout(() => {
+      setEcomSimulationStep(5)
+      setIsEcomSimulating(false)
+    }, 2800)
+  }
 
   if (!project) {
     return <Navigate to="/projects" replace />
@@ -107,141 +133,248 @@ export const ProjectDetailPage: React.FC = () => {
         {/* Bespoke Interactive Visualizations per Project */}
         {project.slug === 'ecommerce' && (
           <section className="bg-[#0a0f1d] border border-cyan-500/40 rounded-lg p-6 sm:p-8 mb-10">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 mb-6 gap-3">
               <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold">
                 <Cpu className="w-4 h-4" />
                 <span>INTERACTIVE MICROSERVICES ARCHITECTURE TOPOLOGY</span>
               </div>
-              <span className="text-[11px] text-slate-500">SPRING BOOT + EUREKA</span>
+              
+              <button
+                onClick={runEcomSimulation}
+                disabled={isEcomSimulating}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition-colors cursor-pointer disabled:opacity-50"
+              >
+                <Play className="w-3.5 h-3.5" />
+                <span>{isEcomSimulating ? 'ROUTING TRANSACTION...' : 'SIMULATE ORDER TRANSACTION'}</span>
+              </button>
             </div>
 
             <div className="p-4 rounded bg-[#070b16] border border-slate-800 space-y-6">
               {/* Client & Ingress */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
-                <div className="px-4 py-2.5 rounded bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 text-xs">
+                <div className={`px-4 py-2.5 rounded border text-xs transition-all ${
+                  ecomSimulationStep === 1
+                    ? 'bg-cyan-500/30 border-cyan-400 text-white shadow-[0_0_15px_#22d3ee]'
+                    : 'bg-cyan-950/60 border-cyan-500/40 text-cyan-300'
+                }`}>
                   <div className="font-bold">React Frontend</div>
                   <div className="text-[10px] text-slate-400">Deployed on Vercel</div>
                 </div>
-                <div className="text-slate-500 font-bold">↓ REST HTTPS ↓</div>
-                <div className="px-5 py-3 rounded bg-amber-950/50 border border-amber-500/50 text-amber-300 text-xs">
+                <div className={`font-bold transition-colors ${ecomSimulationStep >= 1 ? 'text-amber-400' : 'text-slate-600'}`}>
+                  ↓ HTTPS POST /api/orders ↓
+                </div>
+                <div className={`px-5 py-3 rounded border text-xs transition-all ${
+                  ecomSimulationStep === 2
+                    ? 'bg-amber-500/30 border-amber-400 text-white shadow-[0_0_15px_#f59e0b]'
+                    : 'bg-amber-950/50 border-amber-500/50 text-amber-300'
+                }`}>
                   <div className="font-bold">Spring Cloud API Gateway</div>
-                  <div className="text-[10px] text-slate-400">Dynamic Routing &amp; Perimeter Security</div>
+                  <div className="text-[10px] text-slate-400">Port 8080 · Auth &amp; URI Dispatch</div>
                 </div>
               </div>
 
               {/* Eureka Service Registry */}
-              <div className="w-full py-2 px-4 rounded bg-slate-900 border border-slate-700/80 text-center text-xs text-slate-300 flex items-center justify-center gap-3">
-                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <div className={`w-full py-2 px-4 rounded border text-center text-xs transition-all flex items-center justify-center gap-3 ${
+                ecomSimulationStep === 3
+                  ? 'bg-emerald-950/60 border-emerald-400 text-emerald-300 shadow-[0_0_15px_#10b981]'
+                  : 'bg-slate-900 border-slate-700/80 text-slate-300'
+              }`}>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span className="font-bold text-emerald-400">Netflix Eureka Discovery Server:</span>
-                <span>Heartbeat health registration &amp; load balancing</span>
+                <span>Resolves dynamic service instances across container cluster</span>
               </div>
 
               {/* 3 Autonomous Microservice Nodes */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="p-3.5 rounded bg-[#0c1426] border border-cyan-500/30 text-center">
-                  <div className="text-xs font-bold text-white mb-1">Product Microservice</div>
-                  <div className="text-[10px] text-slate-400 mb-2">Port: 8081 · Spring Boot</div>
+                <div className={`p-3.5 rounded border text-center transition-all ${
+                  ecomSimulationStep === 4
+                    ? 'bg-cyan-950/60 border-cyan-400 text-white shadow-[0_0_15px_#22d3ee]'
+                    : 'bg-[#0c1426] border-cyan-500/30'
+                }`}>
+                  <div className="text-xs font-bold text-white mb-1">Product Service</div>
+                  <div className="text-[10px] text-slate-400 mb-2">Port: 8081 · Stock Check</div>
                   <div className="px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] text-cyan-400">
                     Isolated MySQL DB 1
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded bg-[#0c1426] border border-cyan-500/30 text-center">
-                  <div className="text-xs font-bold text-white mb-1">Order Microservice</div>
-                  <div className="text-[10px] text-slate-400 mb-2">Port: 8082 · Spring Boot</div>
-                  <div className="px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] text-cyan-400">
+                <div className={`p-3.5 rounded border text-center transition-all ${
+                  ecomSimulationStep === 4
+                    ? 'bg-amber-950/60 border-amber-400 text-white shadow-[0_0_15px_#f59e0b]'
+                    : 'bg-[#0c1426] border-cyan-500/30'
+                }`}>
+                  <div className="text-xs font-bold text-white mb-1">Order Service</div>
+                  <div className="text-[10px] text-slate-400 mb-2">Port: 8082 · Invoice Gen</div>
+                  <div className="px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] text-amber-400">
                     Isolated MySQL DB 2
                   </div>
                 </div>
 
                 <div className="p-3.5 rounded bg-[#0c1426] border border-cyan-500/30 text-center">
-                  <div className="text-xs font-bold text-white mb-1">User Microservice</div>
-                  <div className="text-[10px] text-slate-400 mb-2">Port: 8083 · Spring Boot</div>
+                  <div className="text-xs font-bold text-white mb-1">User Service</div>
+                  <div className="text-[10px] text-slate-400 mb-2">Port: 8083 · Session Verify</div>
                   <div className="px-2 py-1 rounded bg-slate-950 border border-slate-800 text-[10px] text-cyan-400">
                     Isolated MySQL DB 3
                   </div>
                 </div>
               </div>
 
-              <div className="text-center text-[11px] text-slate-400 pt-2 border-t border-slate-800">
-                Backend Services Containerized &amp; Hosted on Railway Cloud
-              </div>
+              {/* Live Telemetry Output */}
+              {ecomSimulationStep === 5 && (
+                <div className="p-3 rounded bg-emerald-950/40 border border-emerald-500/50 text-emerald-300 text-xs flex items-center justify-between">
+                  <span className="font-bold">STATUS 200 OK — Order #VTU-8921 processed in 28ms</span>
+                  <span>Payload: JSON {JSON.stringify({ status: 'CONFIRMED', latency: '28ms' })}</span>
+                </div>
+              )}
             </div>
           </section>
         )}
 
         {project.slug === 'csv-platform' && (
           <section className="bg-[#0a0f1d] border border-amber-500/40 rounded-lg p-6 sm:p-8 mb-10">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 mb-6 gap-3">
               <div className="flex items-center gap-2 text-amber-400 text-xs font-bold">
                 <Workflow className="w-4 h-4" />
                 <span>INTERACTIVE 5-STAGE CSV DATA QUALITY PIPELINE</span>
               </div>
-              <span className="text-[11px] text-slate-500">FASTAPI + DOCKER</span>
+              <span className="text-[11px] text-slate-400 font-mono-code">CLICK ANY STAGE TO INSPECT TRANSFORM</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 text-center">
-              <div className="p-3 rounded bg-[#070b16] border border-slate-800">
-                <span className="text-[10px] text-amber-400 font-bold block mb-1">STAGE 1</span>
-                <div className="text-xs font-bold text-white mb-1">CSV INPUT</div>
-                <p className="text-[10px] text-slate-400 font-sans">Multipart upload ingestion</p>
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 text-center mb-6">
+              {[
+                { stage: 1, name: 'CSV INPUT', desc: 'Raw multipart ingestion', color: 'border-amber-500' },
+                { stage: 2, name: 'ANALYSIS', desc: 'Schema & type detection', color: 'border-cyan-500' },
+                { stage: 3, name: 'VALIDATION', desc: 'Null & duplicate scan', color: 'border-amber-500' },
+                { stage: 4, name: 'CLEANING', desc: 'Median/mode imputation', color: 'border-cyan-500' },
+                { stage: 5, name: 'OUTPUT', desc: 'Clean CSV & audit log', color: 'border-emerald-500' }
+              ].map((s) => (
+                <button
+                  key={s.stage}
+                  onClick={() => setCsvActiveStage(s.stage)}
+                  className={`p-3 rounded border text-left sm:text-center transition-all cursor-pointer ${
+                    csvActiveStage === s.stage
+                      ? 'bg-amber-950/40 border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.2)]'
+                      : 'bg-[#070b16] border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  <span className="text-[10px] text-amber-400 font-bold block mb-1">STAGE {s.stage}</span>
+                  <div className="text-xs font-bold text-white mb-1">{s.name}</div>
+                  <p className="text-[10px] text-slate-400 font-sans">{s.desc}</p>
+                </button>
+              ))}
+            </div>
 
-              <div className="p-3 rounded bg-[#070b16] border border-slate-800">
-                <span className="text-[10px] text-cyan-400 font-bold block mb-1">STAGE 2</span>
-                <div className="text-xs font-bold text-white mb-1">ANALYSIS</div>
-                <p className="text-[10px] text-slate-400 font-sans">Schema &amp; type profiling</p>
-              </div>
-
-              <div className="p-3 rounded bg-[#070b16] border border-slate-800">
-                <span className="text-[10px] text-amber-400 font-bold block mb-1">STAGE 3</span>
-                <div className="text-xs font-bold text-white mb-1">VALIDATION</div>
-                <p className="text-[10px] text-slate-400 font-sans">Missing values &amp; duplicate check</p>
-              </div>
-
-              <div className="p-3 rounded bg-[#070b16] border border-slate-800">
-                <span className="text-[10px] text-cyan-400 font-bold block mb-1">STAGE 4</span>
-                <div className="text-xs font-bold text-white mb-1">CLEANING</div>
-                <p className="text-[10px] text-slate-400 font-sans">Median/mode imputation &amp; prune</p>
-              </div>
-
-              <div className="p-3 rounded bg-emerald-950/40 border border-emerald-500/40">
-                <span className="text-[10px] text-emerald-400 font-bold block mb-1">STAGE 5</span>
-                <div className="text-xs font-bold text-emerald-300 mb-1">OUTPUT</div>
-                <p className="text-[10px] text-slate-400 font-sans">Sanitized CSV + Audit log</p>
-              </div>
+            {/* Stage Detail Simulation Box */}
+            <div className="p-4 rounded bg-[#070b16] border border-slate-800 space-y-2">
+              <span className="text-xs font-bold text-cyan-400">
+                ACTIVE STAGE {csvActiveStage} DATA SAMPLE TELEMETRY:
+              </span>
+              {csvActiveStage === 1 && (
+                <p className="text-xs text-slate-300 font-sans">
+                  Uploaded file: <code className="text-amber-300">patient_records_raw.csv</code> (12,450 rows, 14 columns). Streaming chunks into memory buffer.
+                </p>
+              )}
+              {csvActiveStage === 2 && (
+                <p className="text-xs text-slate-300 font-sans">
+                  Schema analyzed: 8 numerical float columns, 4 categorical string columns, 2 datetime fields. Identifies mismatched datatypes.
+                </p>
+              )}
+              {csvActiveStage === 3 && (
+                <p className="text-xs text-slate-300 font-sans">
+                  Validation detected: 48 missing values in <code className="text-amber-300">age</code>, 12 missing in <code className="text-amber-300">city</code>, and 18 duplicate ID records flagged.
+                </p>
+              )}
+              {csvActiveStage === 4 && (
+                <p className="text-xs text-slate-300 font-sans">
+                  Cleaning routines: Imputed missing ages with numerical median (34.0); imputed missing cities with categorical mode ("Bangalore"); pruned 18 duplicates.
+                </p>
+              )}
+              {csvActiveStage === 5 && (
+                <p className="text-xs text-emerald-400 font-sans">
+                  Output ready: Streamed clean CSV <code className="text-white">patient_records_cleaned.csv</code> with 100% data completeness and generated JSON audit certification report.
+                </p>
+              )}
             </div>
           </section>
         )}
 
         {project.slug === 'facial-analysis' && (
           <section className="bg-[#0a0f1d] border border-cyan-500/40 rounded-lg p-6 sm:p-8 mb-10">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 mb-6 gap-3">
               <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold">
                 <Cpu className="w-4 h-4" />
-                <span>COMPUTER VISION GEOMETRIC TELEMETRY (EAR &amp; MAR)</span>
+                <span>INTERACTIVE COMPUTER VISION GEOMETRY SIMULATOR</span>
               </div>
-              <span className="text-[11px] text-slate-500">MEDIAPIPE + OPENCV</span>
+              <span className="text-[11px] text-slate-400 font-mono-code">SELECT SIMULATED DRIVER BEHAVIOR</span>
             </div>
 
+            {/* State Selector Buttons */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
+              {[
+                { id: 'alert', label: 'NORMAL ALERT' },
+                { id: 'blink', label: 'BRIEF BLINK' },
+                { id: 'drowsy', label: 'SUSTAINED CLOSURE' },
+                { id: 'yawn', label: 'PROLONGED YAWN' }
+              ].map((b) => (
+                <button
+                  key={b.id}
+                  onClick={() => setFaceState(b.id as any)}
+                  className={`p-2.5 rounded border text-xs font-bold transition-all cursor-pointer ${
+                    faceState === b.id
+                      ? 'bg-cyan-950/60 border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                      : 'bg-[#070b16] border-slate-800 text-slate-400 hover:text-white'
+                  }`}
+                >
+                  {b.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Real-Time Mathematical Telemetry readout */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-4 rounded bg-[#070b16] border border-slate-800 space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-cyan-400 font-bold">EYE ASPECT RATIO (EAR)</span>
-                  <span className="text-slate-400">Formula: (||p2-p6|| + ||p3-p5||) / (2||p1-p4||)</span>
+                  <span className="text-white font-bold">
+                    {faceState === 'alert' && '0.34 [NORMAL]'}
+                    {faceState === 'blink' && '0.19 [NORMAL BLINK]'}
+                    {faceState === 'drowsy' && '0.14 [BELOW THRESHOLD]'}
+                    {faceState === 'yawn' && '0.28 [NOMINAL]'}
+                  </span>
                 </div>
-                <p className="text-xs text-slate-300 font-sans">
-                  Monitors eye closure intervals. When EAR drops below threshold for a continuous temporal window, it signals sustained blink or drowsiness rather than a standard rapid blink.
+                <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full transition-all duration-300 ${faceState === 'drowsy' ? 'bg-red-500' : 'bg-cyan-400'}`}
+                    style={{
+                      width: faceState === 'drowsy' ? '30%' : faceState === 'blink' ? '45%' : '80%'
+                    }}
+                  />
+                </div>
+                <p className="text-[11px] text-slate-400 font-sans">
+                  Threshold: 0.22. Eye closure below threshold for &gt; 15 consecutive frames activates temporal drowsiness trigger.
                 </p>
               </div>
 
               <div className="p-4 rounded bg-[#070b16] border border-slate-800 space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-amber-400 font-bold">MOUTH ASPECT RATIO (MAR)</span>
-                  <span className="text-slate-400">Formula: ||upper_lip - lower_lip|| / ||corner_dist||</span>
+                  <span className="text-white font-bold">
+                    {faceState === 'alert' && '0.14 [CLOSED/TALKING]'}
+                    {faceState === 'blink' && '0.15 [NOMINAL]'}
+                    {faceState === 'drowsy' && '0.16 [NOMINAL]'}
+                    {faceState === 'yawn' && '0.64 [YAWN THRESHOLD EXCEEDED]'}
+                  </span>
                 </div>
-                <p className="text-xs text-slate-300 font-sans">
-                  Measures mouth vertical opening duration. Distinguishes natural conversational movements from prolonged yawning indicators.
+                <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full transition-all duration-300 ${faceState === 'yawn' ? 'bg-amber-400' : 'bg-cyan-400'}`}
+                    style={{
+                      width: faceState === 'yawn' ? '90%' : '25%'
+                    }}
+                  />
+                </div>
+                <p className="text-[11px] text-slate-400 font-sans">
+                  Threshold: 0.50. Sustained vertical opening distinguishes involuntary yawns from speech phonemes.
                 </p>
               </div>
             </div>
@@ -255,14 +388,47 @@ export const ProjectDetailPage: React.FC = () => {
 
         {project.slug === 'ecoband' && (
           <section className="bg-[#0a0f1d] border border-amber-500/40 rounded-lg p-6 sm:p-8 mb-10">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 mb-6 gap-3">
               <div className="flex items-center gap-2 text-amber-400 text-xs font-bold">
-                <Cpu className="w-4 h-4" />
-                <span>ECOBAND ARCHITECTURAL TAXONOMY &amp; STATUS</span>
+                <Activity className="w-4 h-4" />
+                <span>ECOBAND INTERACTIVE SENSOR TELEMETRY SIMULATOR</span>
               </div>
-              <span className="text-[11px] text-amber-400 font-bold">IEEE SASIGD 2026</span>
+              <span className="text-xs text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-950/40 border border-amber-500/30">
+                IEEE SASIGD 2026
+              </span>
             </div>
 
+            {/* Interactive Bin Fill Slider */}
+            <div className="p-4 rounded bg-[#070b16] border border-slate-800 mb-6 space-y-3">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-slate-300 font-bold">ADJUST MUNICIPAL RECEPTACLE FILL LEVEL:</span>
+                <span className="text-amber-400 font-bold text-sm">{binFill}% FULL</span>
+              </div>
+              <input
+                type="range"
+                min="5"
+                max="98"
+                value={binFill}
+                onChange={(e) => setBinFill(Number(e.target.value))}
+                className="w-full accent-amber-500 cursor-pointer"
+              />
+              <div className="grid grid-cols-3 gap-2 text-center text-[11px] text-slate-400 pt-2 border-t border-slate-800">
+                <div>
+                  <span className="text-slate-500 block">ULTRASONIC DISTANCE</span>
+                  <span className="text-cyan-300 font-bold">{Math.round(100 - binFill * 0.8)} cm</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block">LOAD CELL MASS</span>
+                  <span className="text-amber-300 font-bold">{(binFill * 0.28).toFixed(1)} kg</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block">EST. CALORIFIC VALUE</span>
+                  <span className="text-emerald-400 font-bold">{(binFill * 0.14).toFixed(1)} MJ/kg</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Clear Status Taxonomy Breakdown */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               
               {/* Implemented */}

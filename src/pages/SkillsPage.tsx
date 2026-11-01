@@ -1,15 +1,26 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { BackToHub } from '../components/navigation/BackToHub'
 import { SKILL_CATEGORIES, SKILLS_DATA } from '../data/skills'
 import type { SkillItem } from '../types'
 import { useExploration } from '../context/ExplorationContext'
-import { ArrowRight, Sparkles, Filter, Link as LinkIcon, CheckCircle2 } from 'lucide-react'
+import { ArrowRight, Sparkles, Filter, Link as LinkIcon, CheckCircle2, Search, Network, Grid3X3 } from 'lucide-react'
 
-import { Link } from 'react-router-dom'
+// Helper to get direct project route
+const getProjectRoute = (connection?: string): string => {
+  if (!connection) return '/projects'
+  if (connection.includes('E-Commerce')) return '/projects/ecommerce'
+  if (connection.includes('CSV')) return '/projects/csv-platform'
+  if (connection.includes('Facial')) return '/projects/facial-analysis'
+  if (connection.includes('EcoBand')) return '/projects/ecoband'
+  return '/projects'
+}
 
 export const SkillsPage: React.FC = () => {
   const { markPortalVisited, markSkillsInteracted } = useExploration()
   const [selectedCategory, setSelectedCategory] = useState<string>('All')
+  const [searchQuery, setSearchQuery] = useState<string>('')
+  const [viewMode, setViewMode] = useState<'grid' | 'constellation'>('grid')
   const [activeSkill, setActiveSkill] = useState<SkillItem>(SKILLS_DATA[0]!)
 
   useEffect(() => {
@@ -21,9 +32,28 @@ export const SkillsPage: React.FC = () => {
     markSkillsInteracted()
   }
 
-  const filteredSkills = selectedCategory === 'All'
-    ? SKILLS_DATA
-    : SKILLS_DATA.filter((s) => s.category === selectedCategory)
+  const filteredSkills = SKILLS_DATA.filter((skill) => {
+    const matchesCategory = selectedCategory === 'All' || skill.category === selectedCategory
+    const matchesSearch =
+      skill.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      skill.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (skill.tags && skill.tags.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase())))
+    return matchesCategory && matchesSearch
+  })
+
+  // Constellation interactive nodes mapping
+  const constellationNodes = [
+    { name: 'Java', cx: 160, cy: 120, cat: 'Programming' },
+    { name: 'Spring Boot', cx: 300, cy: 140, cat: 'Backend' },
+    { name: 'Microservices', cx: 460, cy: 110, cat: 'Backend' },
+    { name: 'MySQL', cx: 340, cy: 260, cat: 'Database' },
+    { name: 'Python', cx: 180, cy: 300, cat: 'Programming' },
+    { name: 'FastAPI', cx: 320, cy: 370, cat: 'Backend' },
+    { name: 'Docker', cx: 490, cy: 340, cat: 'Tools' },
+    { name: 'ESP32', cx: 620, cy: 200, cat: 'IoT Hardware' },
+    { name: 'Ultrasonic Sensors', cx: 700, cy: 120, cat: 'IoT Hardware' },
+    { name: 'Load Cell', cx: 720, cy: 280, cat: 'IoT Hardware' },
+  ]
 
   return (
     <div className="w-full min-h-screen bg-[#060913] text-[#f8fafc]">
@@ -42,46 +72,158 @@ export const SkillsPage: React.FC = () => {
               THE SKILL MATRIX
             </h1>
             <p className="text-sm text-slate-400 font-sans mt-1">
-              Explore interconnected technology nodes, runtime environments, and project mappings.
+              Explore interconnected technology nodes, runtime environments, and authentic project mappings.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-amber-400 bg-amber-950/30 border border-amber-500/30 px-3 py-1.5 rounded self-start md:self-auto">
-            <Sparkles className="w-4 h-4" />
-            <span>INTERACTIVE NODE INSPECTOR</span>
+          <div className="flex items-center gap-2">
+            {/* View Mode Toggle */}
+            <div className="flex items-center bg-slate-900 border border-slate-800 rounded p-1 text-xs">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded transition-colors ${
+                  viewMode === 'grid' ? 'bg-cyan-500/20 text-cyan-400 font-bold' : 'text-slate-400 hover:text-white'
+                }`}
+                title="Grid Matrix View"
+              >
+                <Grid3X3 className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Grid</span>
+              </button>
+              <button
+                onClick={() => setViewMode('constellation')}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded transition-colors ${
+                  viewMode === 'constellation' ? 'bg-amber-500/20 text-amber-400 font-bold' : 'text-slate-400 hover:text-white'
+                }`}
+                title="Constellation Graph View"
+              >
+                <Network className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Graph</span>
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs text-amber-400 bg-amber-950/30 border border-amber-500/30 px-3 py-1.5 rounded">
+              <Sparkles className="w-4 h-4" />
+              <span>INTERACTIVE</span>
+            </div>
           </div>
         </div>
 
-        {/* Filter Bar */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-6 text-xs scrollbar-none">
-          <div className="flex items-center gap-1.5 text-slate-500 pr-2 border-r border-slate-800 shrink-0">
-            <Filter className="w-3.5 h-3.5" />
-            <span>CATEGORY:</span>
-          </div>
-          <button
-            onClick={() => setSelectedCategory('All')}
-            className={`px-3 py-1.5 rounded transition-colors shrink-0 cursor-pointer ${
-              selectedCategory === 'All'
-                ? 'bg-amber-500 text-slate-950 font-bold'
-                : 'bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
-            }`}
-          >
-            All Domains ({SKILLS_DATA.length})
-          </button>
-          {SKILL_CATEGORIES.map((cat) => (
+        {/* Filter & Search Bar */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          
+          {/* Category Tabs */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none text-xs">
+            <div className="flex items-center gap-1.5 text-slate-500 pr-2 border-r border-slate-800 shrink-0">
+              <Filter className="w-3.5 h-3.5" />
+              <span>FILTER:</span>
+            </div>
             <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
+              onClick={() => setSelectedCategory('All')}
               className={`px-3 py-1.5 rounded transition-colors shrink-0 cursor-pointer ${
-                selectedCategory === cat
+                selectedCategory === 'All'
                   ? 'bg-amber-500 text-slate-950 font-bold'
                   : 'bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
               }`}
             >
-              {cat}
+              All ({SKILLS_DATA.length})
             </button>
-          ))}
+            {SKILL_CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3 py-1.5 rounded transition-colors shrink-0 cursor-pointer ${
+                  selectedCategory === cat
+                    ? 'bg-amber-500 text-slate-950 font-bold'
+                    : 'bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Quick Search Input */}
+          <div className="relative min-w-[220px]">
+            <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Query skills (e.g. Spring, Docker)..."
+              className="w-full bg-[#0a0f1d] border border-slate-800 rounded pl-9 pr-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-500 font-mono-code placeholder:text-slate-600"
+            />
+          </div>
         </div>
+
+        {/* View Mode 1: Constellation Topology Visualizer */}
+        {viewMode === 'constellation' && (
+          <div className="mb-8 p-6 rounded-lg bg-[#0a0f1d] border border-cyan-500/40 relative overflow-hidden">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4 text-xs">
+              <span className="text-cyan-400 font-bold flex items-center gap-2">
+                <Network className="w-4 h-4" />
+                <span>INTERACTIVE TOPOLOGY GRAPH // CLICK ANY NODE TO INSPECT</span>
+              </span>
+              <span className="text-slate-500 hidden sm:inline">NODAL CLUSTERS</span>
+            </div>
+
+            <div className="w-full overflow-x-auto">
+              <svg viewBox="0 0 850 440" className="w-full min-w-[700px] h-72">
+                {/* Background Grid */}
+                <defs>
+                  <pattern id="graph-grid" width="30" height="30" patternUnits="userSpaceOnUse">
+                    <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#1e293b" strokeWidth="0.5" strokeOpacity="0.4" />
+                  </pattern>
+                </defs>
+                <rect width="850" height="440" fill="url(#graph-grid)" />
+
+                {/* Circuit Links between Nodes */}
+                <line x1="160" y1="120" x2="300" y2="140" stroke="#0ea5e9" strokeWidth="1.5" strokeOpacity="0.5" />
+                <line x1="300" y1="140" x2="460" y2="110" stroke="#0ea5e9" strokeWidth="1.5" strokeOpacity="0.5" />
+                <line x1="300" y1="140" x2="340" y2="260" stroke="#f59e0b" strokeWidth="1.5" strokeOpacity="0.5" />
+                <line x1="180" y1="300" x2="320" y2="370" stroke="#0ea5e9" strokeWidth="1.5" strokeOpacity="0.5" />
+                <line x1="320" y1="370" x2="490" y2="340" stroke="#38bdf8" strokeWidth="1.5" strokeOpacity="0.5" />
+                <line x1="460" y1="110" x2="620" y2="200" stroke="#f59e0b" strokeWidth="1.2" strokeDasharray="3 3" strokeOpacity="0.4" />
+                <line x1="620" y1="200" x2="700" y2="120" stroke="#f59e0b" strokeWidth="1.8" strokeOpacity="0.6" />
+                <line x1="620" y1="200" x2="720" y2="280" stroke="#f59e0b" strokeWidth="1.8" strokeOpacity="0.6" />
+
+                {/* Interactive SVG Nodes */}
+                {constellationNodes.map((n) => {
+                  const matchingSkill = SKILLS_DATA.find((s) => s.name === n.name)
+                  const isSelected = activeSkill.name === n.name
+                  return (
+                    <g
+                      key={n.name}
+                      transform={`translate(${n.cx}, ${n.cy})`}
+                      className="cursor-pointer"
+                      onClick={() => matchingSkill && handleSelectSkill(matchingSkill)}
+                    >
+                      <circle
+                        r={isSelected ? 26 : 20}
+                        fill={isSelected ? '#0c1a36' : '#081024'}
+                        stroke={isSelected ? '#f59e0b' : '#0284c7'}
+                        strokeWidth={isSelected ? 2.5 : 1.5}
+                      />
+                      <circle
+                        r={4}
+                        fill={isSelected ? '#f59e0b' : '#38bdf8'}
+                      />
+                      <text
+                        y={32}
+                        textAnchor="middle"
+                        fontFamily="monospace"
+                        fontSize="10"
+                        fill={isSelected ? '#fbbf24' : '#f8fafc'}
+                        fontWeight={isSelected ? 'bold' : 'normal'}
+                      >
+                        {n.name}
+                      </text>
+                    </g>
+                  )
+                })}
+              </svg>
+            </div>
+          </div>
+        )}
 
         {/* 2-Column Split: Node Constellation Grid + Detail Telemetry Inspector */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -95,7 +237,7 @@ export const SkillsPage: React.FC = () => {
                   <button
                     key={skill.name}
                     onClick={() => handleSelectSkill(skill)}
-                    className={`p-3.5 rounded-lg border text-left transition-all cursor-pointer relative group flex flex-col justify-between min-h-[92px] ${
+                    className={`p-3.5 rounded-lg border text-left transition-all cursor-pointer relative group flex flex-col justify-between min-h-[96px] ${
                       isSelected
                         ? 'bg-amber-950/20 border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.15)] ring-1 ring-amber-500'
                         : 'bg-[#0a0f1d] border-slate-800/90 hover:border-cyan-500/50 hover:bg-[#0c1427]'
@@ -121,9 +263,15 @@ export const SkillsPage: React.FC = () => {
                 )
               })}
             </div>
+
+            {filteredSkills.length === 0 && (
+              <div className="p-8 rounded-lg bg-[#0a0f1d] border border-slate-800 text-center text-slate-500 text-xs">
+                No matching technologies found for "{searchQuery}".
+              </div>
+            )}
           </div>
 
-          {/* Right Column: Node Inspector Inspector Panel */}
+          {/* Right Column: Node Inspector Panel */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 bg-[#0a0f1d] border border-cyan-500/40 rounded-lg p-6 shadow-[0_0_25px_rgba(6,182,212,0.1)]">
               <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
@@ -176,10 +324,10 @@ export const SkillsPage: React.FC = () => {
                       {activeSkill.projectConnection}
                     </p>
                     <Link
-                      to="/projects"
-                      className="inline-flex items-center gap-1.5 text-xs text-amber-400 hover:underline"
+                      to={getProjectRoute(activeSkill.projectConnection)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-amber-500 text-slate-950 font-bold text-xs hover:bg-amber-400 transition-colors"
                     >
-                      <span>Inspect in Project Labs</span>
+                      <span>Launch Project Lab</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>

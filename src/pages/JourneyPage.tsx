@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { BackToHub } from '../components/navigation/BackToHub'
 import { JOURNEY_DATA } from '../data/journey'
 import { useExploration } from '../context/ExplorationContext'
-import { ChevronDown, ChevronUp, Clock } from 'lucide-react'
+import { ChevronDown, ChevronUp, Clock, Filter } from 'lucide-react'
+
 
 export const JourneyPage: React.FC = () => {
   const { markPortalVisited } = useExploration()
-  const [expandedIndices, setExpandedIndices] = useState<number[]>([0, 1])
+  const [expandedIndices, setExpandedIndices] = useState<number[]>([0, 1, 2])
+  const [selectedCategory, setSelectedCategory] = useState<string>('All')
 
   useEffect(() => {
     markPortalVisited('journey')
@@ -18,6 +20,22 @@ export const JourneyPage: React.FC = () => {
     )
   }
 
+  const toggleAll = () => {
+    if (expandedIndices.length === JOURNEY_DATA.length) {
+      setExpandedIndices([])
+    } else {
+      setExpandedIndices(JOURNEY_DATA.map((_, i) => i))
+    }
+  }
+
+  const filteredData = JOURNEY_DATA.filter((m) => {
+    if (selectedCategory === 'All') return true
+    if (selectedCategory === 'Education') return m.period?.includes('Education') || m.period?.includes('School') || m.period?.includes('Engineering')
+    if (selectedCategory === 'Industry IoT') return m.title.includes('Samsung')
+    if (selectedCategory === 'Leadership & Clubs') return m.title.includes('IEEE') || m.title.includes('Club')
+    return true
+  })
+
   return (
     <div className="w-full min-h-screen bg-[#060913] text-[#f8fafc]">
       <BackToHub currentPortalName="PORTAL 05 // THE JOURNEY ARCHIVE" />
@@ -25,7 +43,7 @@ export const JourneyPage: React.FC = () => {
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-mono-code">
         
         {/* Module Header */}
-        <div className="mb-10 border-b border-slate-800 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="mb-8 border-b border-slate-800 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold tracking-widest uppercase mb-2">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -39,15 +57,45 @@ export const JourneyPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-cyan-400 bg-cyan-950/30 border border-cyan-500/30 px-3 py-1.5 rounded self-start md:self-auto">
-            <Clock className="w-4 h-4" />
-            <span>2020 — 2027+ TRAJECTORY</span>
+          <div className="flex items-center gap-3 self-start md:self-auto">
+            <button
+              onClick={toggleAll}
+              className="px-3 py-1.5 rounded bg-slate-900 border border-slate-700 hover:border-cyan-400 text-xs text-slate-300 hover:text-white transition-colors cursor-pointer"
+            >
+              {expandedIndices.length === JOURNEY_DATA.length ? 'Collapse All' : 'Expand All'}
+            </button>
+
+            <div className="flex items-center gap-2 text-xs text-cyan-400 bg-cyan-950/30 border border-cyan-500/30 px-3 py-1.5 rounded">
+              <Clock className="w-4 h-4" />
+              <span>2020 — 2027+</span>
+            </div>
           </div>
+        </div>
+
+        {/* Milestone Category Filter Tabs */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 text-xs scrollbar-none">
+          <div className="flex items-center gap-1.5 text-slate-500 pr-2 border-r border-slate-800 shrink-0">
+            <Filter className="w-3.5 h-3.5" />
+            <span>FILTER:</span>
+          </div>
+          {['All', 'Education', 'Industry IoT', 'Leadership & Clubs'].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-3 py-1.5 rounded transition-colors shrink-0 cursor-pointer ${
+                selectedCategory === cat
+                  ? 'bg-cyan-500 text-slate-950 font-bold'
+                  : 'bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
 
         {/* Timeline Vector Spine */}
         <div className="relative pl-6 sm:pl-8 border-l-2 border-slate-800 space-y-8 my-6">
-          {JOURNEY_DATA.map((milestone, idx) => {
+          {filteredData.map((milestone, idx) => {
             const isExpanded = expandedIndices.includes(idx)
             return (
               <div key={idx} className="relative group">

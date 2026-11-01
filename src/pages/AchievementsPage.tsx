@@ -3,11 +3,12 @@ import { BackToHub } from '../components/navigation/BackToHub'
 import { ACHIEVEMENTS_DATA } from '../data/achievements'
 import type { AchievementItem } from '../types'
 import { useExploration } from '../context/ExplorationContext'
-import { Award, ChevronDown, ChevronUp, Filter, Sparkles, CheckCircle2, ShieldCheck } from 'lucide-react'
+import { Award, ChevronDown, ChevronUp, Filter, Sparkles, CheckCircle2, ShieldCheck, Search } from 'lucide-react'
 
 export const AchievementsPage: React.FC = () => {
   const { markPortalVisited, markAchievementsInspected } = useExploration()
   const [selectedFilter, setSelectedFilter] = useState<'All' | 'Academic' | 'Technical' | 'Presentations'>('All')
+  const [searchQuery, setSearchQuery] = useState<string>('')
   const [expandedId, setExpandedId] = useState<string | null>('medal-of-merit')
 
   useEffect(() => {
@@ -19,9 +20,15 @@ export const AchievementsPage: React.FC = () => {
     markAchievementsInspected()
   }
 
-  const filteredAchievements = selectedFilter === 'All'
-    ? ACHIEVEMENTS_DATA
-    : ACHIEVEMENTS_DATA.filter((a) => a.category === selectedFilter)
+  const filteredAchievements = ACHIEVEMENTS_DATA.filter((item) => {
+    const matchesFilter = selectedFilter === 'All' || item.category === selectedFilter
+    const matchesSearch =
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.institution.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.metric && item.metric.toLowerCase().includes(searchQuery.toLowerCase()))
+    return matchesFilter && matchesSearch
+  })
 
   return (
     <div className="w-full min-h-screen bg-[#060913] text-[#f8fafc]">
@@ -46,29 +53,66 @@ export const AchievementsPage: React.FC = () => {
 
           <div className="flex items-center gap-2 text-xs text-amber-400 bg-amber-950/30 border border-amber-500/30 px-3 py-1.5 rounded self-start md:self-auto">
             <ShieldCheck className="w-4 h-4" />
-            <span>VERIFIED ACADEMIC RECORDS ONLY</span>
+            <span>VERIFIED TEXT RECORDS ONLY // NO ATTACHMENTS</span>
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 text-xs scrollbar-none">
-          <div className="flex items-center gap-1.5 text-slate-500 pr-2 border-r border-slate-800 shrink-0">
-            <Filter className="w-3.5 h-3.5" />
-            <span>FILTER ARCHIVE:</span>
+        {/* Quick Summary Telemetry Bar */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+          <div className="p-3.5 rounded bg-[#0a0f1d] border border-slate-800">
+            <span className="text-[10px] text-slate-500 block">TOTAL RECORDS</span>
+            <span className="text-lg font-bold text-white">5 Verified</span>
+            <span className="text-[10px] text-cyan-400 block mt-0.5">Academic &amp; Research</span>
           </div>
-          {(['All', 'Academic', 'Technical', 'Presentations'] as const).map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setSelectedFilter(filter)}
-              className={`px-3.5 py-1.5 rounded transition-colors cursor-pointer shrink-0 ${
-                selectedFilter === filter
-                  ? 'bg-amber-500 text-slate-950 font-bold'
-                  : 'bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
-              }`}
-            >
-              {filter} {filter === 'All' ? `(${ACHIEVEMENTS_DATA.length})` : ''}
-            </button>
-          ))}
+          <div className="p-3.5 rounded bg-[#0a0f1d] border border-slate-800">
+            <span className="text-[10px] text-slate-500 block">STATE STANDING</span>
+            <span className="text-lg font-bold text-amber-400">Rank 10</span>
+            <span className="text-[10px] text-slate-400 block mt-0.5">Karnataka PUE Board</span>
+          </div>
+          <div className="p-3.5 rounded bg-[#0a0f1d] border border-slate-800">
+            <span className="text-[10px] text-slate-500 block">NPTEL PERCENTILE</span>
+            <span className="text-lg font-bold text-emerald-400">Top 1%</span>
+            <span className="text-[10px] text-slate-400 block mt-0.5">Machine Learning Elite</span>
+          </div>
+          <div className="p-3.5 rounded bg-[#0a0f1d] border border-slate-800">
+            <span className="text-[10px] text-slate-500 block">INSTITUTIONAL MERIT</span>
+            <span className="text-lg font-bold text-cyan-400">Medal of Merit</span>
+            <span className="text-[10px] text-slate-400 block mt-0.5">3-Sem Branch Topper</span>
+          </div>
+        </div>
+
+        {/* Filter and Search Bar */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 text-xs scrollbar-none">
+            <div className="flex items-center gap-1.5 text-slate-500 pr-2 border-r border-slate-800 shrink-0">
+              <Filter className="w-3.5 h-3.5" />
+              <span>CATEGORY:</span>
+            </div>
+            {(['All', 'Academic', 'Technical', 'Presentations'] as const).map((filter) => (
+              <button
+                key={filter}
+                onClick={() => setSelectedFilter(filter)}
+                className={`px-3.5 py-1.5 rounded transition-colors cursor-pointer shrink-0 ${
+                  selectedFilter === filter
+                    ? 'bg-amber-500 text-slate-950 font-bold'
+                    : 'bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
+                }`}
+              >
+                {filter} {filter === 'All' ? `(${ACHIEVEMENTS_DATA.length})` : ''}
+              </button>
+            ))}
+          </div>
+
+          <div className="relative min-w-[220px]">
+            <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search honors..."
+              className="w-full bg-[#0a0f1d] border border-slate-800 rounded pl-9 pr-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500 font-mono-code placeholder:text-slate-600"
+            />
+          </div>
         </div>
 
         {/* Achievements Showcase Cards */}
@@ -151,7 +195,7 @@ export const AchievementsPage: React.FC = () => {
 
                     <div className="mt-4 flex items-center gap-2 text-[11px] text-slate-500">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Certified verified text entry · No external downloads required</span>
+                      <span>Certified verified text entry · No external downloads or certificate PDFs required</span>
                     </div>
                   </div>
                 )}

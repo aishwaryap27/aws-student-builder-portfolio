@@ -36,7 +36,7 @@ export const IdentityPage: React.FC = () => {
     iot: {
       title: 'IoT & Hardware-Software Interfacing',
       icon: <Cpu className="w-4 h-4 text-amber-400" />,
-      desc: 'Developing embedded firmware on ESP32 microcontrollers with real-time sensor fusion. Experienced in interfacing HC-SR04 ultrasonic distance sensors, strain-gauge load cells with HX711 amplifiers, and participating in the Samsung Innovation Campus IoT Program.',
+      desc: 'Developing embedded firmware logic on ESP32 microcontrollers with simulated sensor telemetry. Experienced in sensor interfacing concepts (HC-SR04 ultrasonic, strain-gauge load cells with HX711), and participating in the hands-on Samsung Innovation Campus IoT Program.',
       technologies: ['ESP32', 'ESP32-CAM', 'Ultrasonic Sensors', 'Load Cell (HX711)', 'DHT11', 'Hardware Interfacing']
     },
     data: {

@@ -105,42 +105,44 @@ export const PROJECTS_DATA: ProjectItem[] = [
     technologies: ['ESP32', 'ESP32-CAM', 'Ultrasonic HC-SR04', 'Load Cell (HX711)', 'IoT Sensors', 'Telemetry Dashboard'],
     overview: 'An IoT-based retrofit monitoring band concept designed to attach to existing municipal waste bins, transforming conventional containers into smart data nodes for real-time fill-level telemetry, weight monitoring, and municipal resource planning.',
     problemStatement: 'Conventional municipal waste collection follows rigid, unoptimized schedules, causing overflowing bins in high-density areas and fuel-wasting runs to half-empty bins. Upgrading all physical bins is cost-prohibitive.',
-    architectureDescription: 'EcoBand is conceived as an affordable retrofit band containing sensors and an ESP32 microcontroller. The system measures fill volume with ultrasonic pulses and bin mass with load-cell transducers. A concept extension explores using an ESP32-CAM for waste classification and machine-learning models for calorific value estimation to optimize waste-to-energy plant routing.',
+    architectureDescription: 'EcoBand is conceived as an affordable retrofit band concept integrating sensor processing with an ESP32 microcontroller. The software calculates fill volume with ultrasonic pulse time-of-flight algorithms and estimates bin mass with load-cell strain conversion routines. A concept extension explores using an ESP32-CAM for waste classification and machine-learning models for calorific value estimation to optimize waste-to-energy plant routing.',
     workflowSteps: [
-      'Retrofit band attached to standard waste receptacle',
-      'Ultrasonic distance pulses measure fill level percentage [Implemented]',
-      'Load cell with HX711 amplifier measures incremental mass [Implemented]',
-      'ESP32 processes sensor signals and formats telemetry packets [Implemented]',
-      'Dashboard simulates remote telemetry monitoring and fill alerts [Simulated]',
-      'ESP32-CAM visual classification and calorific estimation [Proposed Extension]'
+      'Retrofit band architectural design concept for municipal waste receptacles',
+      'Ultrasonic distance pulse time-of-flight calculation algorithm [Implemented]',
+      'Load-cell strain gauge ADC signal conversion logic [Implemented]',
+      'ESP32 sensor processing and telemetry packet formatting [Implemented]',
+      'Dashboard readings, bin fill levels, and status alerts [Simulated - Physical Hardware Unavailable]',
+      'ESP32-CAM edge vision classification and calorific estimation [Proposed / Conceptual]'
     ],
     conferencePresentation: 'Presented at IEEE SASIGD 2026 (Hyderabad) as an innovative retrofit approach to smart city waste management.',
     implementedComponents: [
-      'ESP32 microcontroller interfacing and firmware logic',
-      'Ultrasonic HC-SR04 sensor distance measurement and fill-level calibration',
-      'Load-cell transducer integration with HX711 signal amplifier for weight readings',
-      'Sensor calibration and basic communication routines'
+      'ESP32 microcontroller firmware architecture and signal processing routines',
+      'Ultrasonic HC-SR04 pulse time-of-flight distance calculation algorithm',
+      'Load-cell strain gauge ADC conversion logic (HX711 software protocol)',
+      'Telemetry data formatting and local threshold notification logic'
     ],
     simulatedComponents: [
-      'Centralized telemetry monitoring dashboard simulating multiple bin nodes',
-      'Algorithmic threshold alarms for scheduled collection dispatch routing'
+      'Real-time receptacle fill percentage and distance readings (simulated because physical hardware was unavailable)',
+      'Load-cell weight values and mass calculation demonstrations (simulated)',
+      'Multi-node municipal fleet telemetry monitoring dashboard demonstration'
     ],
     proposedComponents: [
-      'ESP32-CAM image acquisition for automated edge waste classification',
-      'Machine learning model estimating calorific potential of waste for energy recovery plants',
-      'Large-scale municipal fleet GPS optimization dispatch integration'
+      'Physical retrofit band casing fabrication and municipal container deployment',
+      'ESP32-CAM edge optical waste classification on physical bins',
+      'Machine learning model estimating calorific potential for waste-to-energy routing',
+      'Full-scale municipal GPS fleet dispatch integration'
     ],
     implementationDetails: [
-      'Engineered firmware on ESP32 to poll ultrasonic distance and calculate volumetric bin percentage',
-      'Integrated HX711 ADC amplifier to translate load cell microvolt variances into kilogram metrics',
-      'Formulated calorific estimation concept connecting waste density and volume to energy recovery',
+      'Engineered firmware logic for ESP32 microcontrollers to convert ultrasonic time-of-flight into volumetric fill percentage',
+      'Developed digital signal conversion routines for HX711 ADC to calculate incremental mass variance',
+      'Formulated conceptual calorific estimation methodology correlating waste density with energy recovery',
       'Presented research paper at IEEE SASIGD 2026, Hyderabad',
-      'Honest engineering boundary: Clearly defined boundaries between bench-tested sensor firmware, simulated fleet dashboard, and proposed ML/vision extensions'
+      'Honest engineering boundary: Firmware routines and software algorithms were developed; sensor values, bin status updates, and dashboard telemetry are simulated because physical hardware was unavailable; physical on-bin deployment and edge vision classification are proposed conceptual extensions'
     ],
     learningOutcomes: [
-      'Hands-on sensor calibration with ultrasonic acoustic reflections and load-cell strain gauges',
-      'Microcontroller communication and hardware-software signal synchronization on ESP32',
-      'Scientific research presentation and defense at an IEEE international conference'
+      'Designed microcontroller firmware algorithms for acoustic reflection and strain-gauge signal processing',
+      'Built simulated sensor telemetry dashboards modeling real-time physical device states',
+      'Scientific research presentation and defense at an IEEE international conference (IEEE SASIGD 2026)'
     ]
   }
 ]

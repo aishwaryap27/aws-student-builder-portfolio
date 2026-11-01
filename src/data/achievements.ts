@@ -36,11 +36,11 @@ export const ACHIEVEMENTS_DATA: AchievementItem[] = [
     badgeLabel: 'IEEE SASIGD 2026',
     category: 'Presentations',
     institution: 'IEEE SASIGD 2026, Hyderabad',
-    description: 'Presented "EcoBand: Smart Waste Management System", a retrofit IoT band for real-time waste monitoring and calorific value estimation.',
+    description: 'Presented "EcoBand: Smart Waste Management System", a retrofit IoT band concept for real-time waste monitoring and calorific value estimation.',
     metric: 'IEEE Conference Presenter',
     expandedDetails: [
       'Selected and presented research at the IEEE SASIGD 2026 conference held in Hyderabad.',
-      'Delivered presentation on smart city sustainability focusing on retrofit IoT hardware, sensor fusion (ultrasonic + load-cell), and calorific waste-to-energy estimation.',
+      'Delivered presentation on smart city sustainability focusing on retrofit IoT architectural design, simulated sensor fusion modeling (ultrasonic + load-cell), and calorific waste-to-energy estimation.',
       'Defended methodology before academic reviewers and industry professionals.'
     ]
   },

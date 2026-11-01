@@ -21,7 +21,7 @@ const OPTIONS: ProblemOption[] = [
     projectTitle: 'EcoBand: Smart IoT-Based Waste Management System',
     projectRoute: '/projects/ecoband',
     skills: ['ESP32', 'ESP32-CAM', 'Ultrasonic Sensors', 'Load Cell', 'IoT Hardware', 'Calorific Estimation'],
-    explanation: 'Combines retrofit hardware telemetry with sensor fusion (ultrasonic fill-level + load-cell weight estimation) for real-time municipal resource monitoring. Presented at IEEE SASIGD 2026.',
+    explanation: 'Architected firmware logic and simulated sensor fusion (ultrasonic fill-level + load-cell weight estimation) for municipal resource monitoring concepts. Presented at IEEE SASIGD 2026.',
     domain: 'EMBEDDED IoT // SENSOR TELEMETRY'
   },
   {

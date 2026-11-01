@@ -435,7 +435,7 @@ export const ProjectDetailPage: React.FC = () => {
               <div className="p-4 rounded bg-emerald-950/20 border border-emerald-500/40 space-y-3">
                 <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold">
                   <CheckCircle2 className="w-4 h-4" />
-                  <span>IMPLEMENTED IN HARDWARE</span>
+                  <span>IMPLEMENTED (SOFTWARE &amp; FIRMWARE)</span>
                 </div>
                 <ul className="text-xs text-slate-300 space-y-1.5 font-sans">
                   {project.implementedComponents?.map((item) => (
@@ -481,7 +481,7 @@ export const ProjectDetailPage: React.FC = () => {
             </div>
 
             <div className="mt-4 p-3 rounded bg-slate-900 border border-slate-800 text-[11px] text-slate-400">
-              <strong>Honest Engineering Verification:</strong> Only bench-tested microcontroller sensor telemetry is claimed as implemented; image classification and fleetwide dispatch are presented as simulated/proposed conceptual extensions.
+              <strong>Honest Engineering Verification:</strong> Implemented features comprise ESP32 firmware routines, distance calculations, and conversion logic. Bin status updates, sensor values, and dashboard telemetry are simulated because physical hardware was unavailable. Edge image classification and physical fleet deployment are proposed conceptual extensions.
             </div>
           </section>
         )}

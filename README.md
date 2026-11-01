@@ -73,11 +73,12 @@ AISHWARYA.EXE /
 
 ### Chamber 04 — EcoBand: Smart IoT-Based Waste Management System
 - **Technologies**: ESP32, ESP32-CAM, Ultrasonic HC-SR04, Load Cell (HX711), IoT Sensors.
-- **Live Simulator**: Interactive municipal receptacle slider recalculating ultrasonic distance reflections, strain-gauge mass readings, and estimated waste calorific values (MJ/kg).
+- **Interactive Simulator**: In-browser municipal receptacle simulator demonstrating ultrasonic distance reflections, strain-gauge mass readings, and estimated waste calorific values (MJ/kg).
+- **Presentation**: Research and architectural concept presented at **IEEE SASIGD 2026, Hyderabad**.
 - **Rigorous Engineering Partition**:
-  - **Implemented in Hardware**: ESP32 microcontroller, ultrasonic sensor distance calibration, load cell signal amplification.
-  - **Simulated Components**: Centralized municipal fleet monitoring dashboard.
-  - **Proposed Extensions**: ESP32-CAM edge vision classification and waste-to-energy machine learning models.
+  - **Implemented (Software & Firmware)**: ESP32 C++/Arduino firmware logic, ultrasonic time-of-flight distance calculation routines, HX711 24-bit ADC mass conversion algorithms, fill-level percentage thresholding, and MQTT/HTTP telemetry JSON payload formatting.
+  - **Simulated**: Centralized municipal fleet telemetry dashboard, real-time bin status updates, ultrasonic distance reflections, strain-gauge mass readings, and fill-level demonstrations (simulated in software and in-browser interactive models because physical municipal hardware was unavailable).
+  - **Proposed / Planned**: Physical on-bin retrofit casing installation, live municipal bin field deployment, on-device ESP32-CAM optical edge classification, and waste-to-energy calorific estimation ML models (conceptual architectures designed for municipal scaling).
 
 ---
 
@@ -116,21 +117,48 @@ frontend:
       - node_modules/**/*
 ```
 
-### Single Page Application (SPA) Routing Rewrite Rule:
-In the AWS Amplify Console under **Rewrites and redirects**, configure:
-- **Source address**: `</^[^.]+$|\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json)$)([^.]+$)/>`
-- **Target address**: `/index.html`
-- **Type**: `200 (Rewrite)`
+### Single Page Application (SPA) Routing Rewrite Rule
 
-This guarantees direct deep links (e.g. `https://domain.com/projects/ecoband`) route cleanly through the client-side router without 404 errors.
+In modern client-side Single Page Applications (SPAs) built with React Router, all application routing is managed in the browser. When a user navigates directly to a deep URL or refreshes their browser on an internal route, the hosting web server must return `/index.html` with a 200 status code rather than returning a 404 error.
+
+#### All Supported Application Routes:
+- `/` — Command Hub Dashboard & Welcome Console
+- `/identity` — Portal 01: The Identity Lab (Candidate Dossier & Domain Pillars)
+- `/skills` — Portal 02: The Skill Matrix (Constellation & Category Filters)
+- `/projects` — Portal 03: The Project Labs (Central Engineering Hangar)
+- `/projects/ecommerce` — Chamber 01: E-Commerce Microservices Platform
+- `/projects/csv-platform` — Chamber 02: CSV Data Quality Platform
+- `/projects/facial-analysis` — Chamber 03: Real-Time Facial Behavior Analysis
+- `/projects/ecoband` — Chamber 04: EcoBand Smart IoT Waste System
+- `/achievements` — Portal 04: The Achievement Vault (Verified Records)
+- `/journey` — Portal 05: The Journey Archive (2020–2027+ Timeline)
+- `/connect` — Portal 06: The Connection Hub (Email, GitHub, LinkedIn)
+
+#### Required AWS Amplify Console Configuration:
+> **Deployment Notice:** This rewrite rule is **not yet active in AWS Amplify** and will be configured manually in the AWS Amplify Console after connecting the repository.
+
+To configure direct URL navigation and browser refresh support:
+1. Open the **AWS Amplify Console**.
+2. Select the **aws-student-builder-portfolio** application.
+3. In the left navigation menu, navigate to **App settings** > **Rewrites and redirects**.
+4. Click **Manage rewrites and redirects** or **Add rule**.
+5. Configure the rewrite rule:
+
+| Setting | Value |
+|---|---|
+| **Source address** | `</^[^.]+$|\.(?!(css|gif|ico|jpg|js|png|svg|txt|woff|woff2|ttf|map|json)$)([^.]+$)/>` |
+| **Target address** | `/index.html` |
+| **Type** | `200 (Rewrite)` |
+
+6. Save the rule. This ensures that direct deep navigation and page refreshes on any route resolve directly to the React application.
 
 ---
 
 ## 7. Local Development & Verification
 
 ### Prerequisites
-- Node.js (v18+ or v24+)
-- npm (v9+ or v11+)
+- **Node.js**: `v22.12.0+` (or newer compatible Active LTS release)
+- **npm**: `v10+`
 
 ### Setup Commands
 ```bash
@@ -138,15 +166,19 @@ This guarantees direct deep links (e.g. `https://domain.com/projects/ecoband`) r
 git clone https://github.com/aishwaryap27/aws-student-builder-portfolio.git
 cd aws-student-builder-portfolio
 
-# Install dependencies
-npm install
+# Install dependencies (clean install matching package-lock.json)
+npm ci
 
 # Start local development server
 npm run dev
 ```
 
-### Production Build
+### Verification & Production Build
 ```bash
+# Run code quality audit
+npm run lint
+
+# Compile production bundle
 npm run build
 ```
 Build output compiles into the `./dist` folder with zero TypeScript or bundling errors.

@@ -182,21 +182,21 @@ export const SKILLS_DATA: SkillItem[] = [
   {
     name: 'ESP32-CAM',
     category: 'IoT Hardware',
-    description: 'Compact development board with OV2640 camera module for edge vision and waste classification concepts.',
+    description: 'Compact development board with OV2640 camera module evaluated for proposed edge vision and waste classification concepts.',
     projectConnection: 'EcoBand: Smart IoT Waste System',
     tags: ['Vision at Edge', 'Camera', 'Embedded']
   },
   {
     name: 'Ultrasonic Sensors',
     category: 'IoT Hardware',
-    description: 'HC-SR04 sound-wave distance measurement for real-time fill-level detection in waste containers.',
+    description: 'HC-SR04 pulse time-of-flight distance calculation algorithms modeled for fill-level detection in waste containers.',
     projectConnection: 'EcoBand: Smart IoT Waste System',
     tags: ['Acoustic', 'Fill Level', 'Distance']
   },
   {
     name: 'Load Cell',
     category: 'IoT Hardware',
-    description: 'Strain-gauge transducer paired with HX711 amplifier for precision weight measurement.',
+    description: 'Strain-gauge transducer interfacing principles and HX711 conversion logic for container mass measurement.',
     projectConnection: 'EcoBand: Smart IoT Waste System',
     tags: ['Strain Gauge', 'HX711', 'Mass Measurement']
   },

@@ -133,7 +133,7 @@ export const TerminalModal: React.FC<TerminalModalProps> = ({ isOpen, onClose })
               <li>1. <span className="text-white font-semibold">E-Commerce Microservices</span> (Java, Spring Boot, MySQL, Eureka, Gateway)</li>
               <li>2. <span className="text-white font-semibold">CSV Data Quality Platform</span> (Python, FastAPI, Docker, 5-stage cleaning)</li>
               <li>3. <span className="text-white font-semibold">Real-Time Facial Behavior Analysis</span> (Python, OpenCV, MediaPipe, EAR/MAR)</li>
-              <li>4. <span className="text-white font-semibold">EcoBand: Smart IoT Waste System</span> (ESP32, Load Cell, Sensors, IEEE SASIGD 2026)</li>
+              <li>4. <span className="text-white font-semibold">EcoBand: Smart IoT Waste System</span> (ESP32 Firmware, Sensor Fusion Modeling, IEEE SASIGD 2026)</li>
             </ul>
             <button
               onClick={() => {
